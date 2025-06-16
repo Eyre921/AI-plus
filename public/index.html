@@ -12,31 +12,72 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="text-slate-700">
+<body class="text-white">
+    <!-- SVG滤镜 - 液态玻璃效果 -->
+    <svg style="display: none">
+        <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%" filterUnits="objectBoundingBox">
+            <feTurbulence type="fractalNoise" baseFrequency="0.001 0.005" numOctaves="1" seed="17" result="turbulence" />
+            <feComponentTransfer in="turbulence" result="mapped">
+                <feFuncR type="gamma" amplitude="1" exponent="10" offset="0.5" />
+                <feFuncG type="gamma" amplitude="0" exponent="1" offset="0" />
+                <feFuncB type="gamma" amplitude="0" exponent="1" offset="0.5" />
+            </feComponentTransfer>
+            <feGaussianBlur in="turbulence" stdDeviation="3" result="softMap" />
+            <feSpecularLighting in="softMap" surfaceScale="5" specularConstant="1" specularExponent="100" lighting-color="white" result="specLight">
+                <fePointLight x="-200" y="-200" z="300" />
+            </feSpecularLighting>
+            <feComposite in="specLight" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litImage" />
+            <feDisplacementMap in="SourceGraphic" in2="softMap" scale="200" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+    </svg>
 
-    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+    <header class="bg-black/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
         <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
             <div class="text-xl font-bold text-sky-600" data-config-key="header.brandName"></div>
             <div class="hidden md:flex space-x-8 items-center" id="nav-links-desktop">
                 <!-- Nav links will be populated by JS -->
-                <a href="#contact" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-full transition-transform hover:scale-105" data-config-key="header.contactBtn"></a>
-                <button id="settings-btn" class="settings-btn text-slate-500 hover:text-sky-600 p-2 rounded-full">
-                    <svg class="settings-btn-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.108 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.27.96-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.93l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.02-.398-1.11-.94l-.149-.894c-.07-.424-.384-.764-.78-.93-.398-.164-.855-.142-1.205.108l-.737.527a1.125 1.125 0 0 1-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.272-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.93l.15-.893Z" /></svg>
-                </button>
+                <a href="#contact" class="liquid-glass-btn" data-config-key="header.contactBtn">
+                    <div class="liquid-glass-effect"></div>
+                    <div class="liquid-glass-tint"></div>
+                    <div class="liquid-glass-shine"></div>
+                    <div class="liquid-glass-content">
+                        <span data-config-key="header.contactBtn"></span>
+                    </div>
+                    <div class="liquid-pulse"></div>
+                    <div class="click-gradient"></div>
+                </a>
             </div>
             <div class="md:hidden">
-                <a href="#contact" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-full transition-transform hover:scale-105 text-sm" data-config-key="header.contactBtn"></a>
+                <a href="#contact" class="liquid-glass-btn" data-config-key="header.contactBtn">
+                    <div class="liquid-glass-effect"></div>
+                    <div class="liquid-glass-tint"></div>
+                    <div class="liquid-glass-shine"></div>
+                    <div class="liquid-glass-content !py-2 !px-4 !text-sm">
+                        <span data-config-key="header.contactBtn"></span>
+                    </div>
+                    <div class="liquid-pulse"></div>
+                    <div class="click-gradient"></div>
+                </a>
             </div>
         </nav>
     </header>
 
     <main>
-        <section id="hero" class="py-20 md:py-32 bg-slate-100">
+        <section id="hero" class="py-20 md:py-32">
             <div class="container mx-auto px-6 text-center">
-                <h1 class="text-4xl md:text-6xl font-bold text-slate-800 leading-tight" data-config-key="hero.title"></h1>
-                <p class="mt-6 text-lg md:text-xl text-slate-600 max-w-3xl mx-auto" data-config-key="hero.subtitle"></p>
+                <h1 class="text-4xl md:text-6xl font-bold leading-tight" data-config-key="hero.title"></h1>
+                <p class="mt-6 text-lg md:text-xl text-white/80 max-w-3xl mx-auto" data-config-key="hero.subtitle"></p>
                 <div class="mt-10">
-                    <a href="#compass" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-4 px-8 rounded-full text-lg transition-transform hover:scale-105 glow-btn" data-config-key="hero.ctaBtn"></a>
+                    <a href="#compass" class="liquid-glass-btn" data-config-key="hero.ctaBtn">
+                        <div class="liquid-glass-effect"></div>
+                        <div class="liquid-glass-tint"></div>
+                        <div class="liquid-glass-shine"></div>
+                        <div class="liquid-glass-content">
+                            <span data-config-key="hero.ctaBtn"></span>
+                        </div>
+                        <div class="liquid-pulse"></div>
+                        <div class="click-gradient"></div>
+                    </a>
                 </div>
             </div>
         </section>
@@ -44,30 +85,44 @@
         <section id="vision" class="py-16 md:py-24 section-fade-in">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
-                    <h2 class="text-3xl md:text-4xl font-bold text-slate-800" data-config-key="vision.title"></h2>
-                    <p class="mt-4 text-slate-500 max-w-2xl mx-auto" data-config-key="vision.subtitle"></p>
+                    <h2 class="text-3xl md:text-4xl font-bold" data-config-key="vision.title"></h2>
+                    <p class="mt-4 text-white/70 max-w-2xl mx-auto" data-config-key="vision.subtitle"></p>
                 </div>
                 <div class="grid md:grid-cols-2 gap-8 items-center">
-                    <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">
-                        <h3 class="text-2xl font-bold text-rose-500 mb-6 text-center" data-config-key="vision.painPoints.title"></h3>
-                        <ul class="space-y-4 text-lg" id="pain-points-list"></ul>
+                    <div class="glass-component">
+                        <div class="glass-effect"></div>
+                        <div class="glass-tint"></div>
+                        <div class="glass-shine"></div>
+                        <div class="glass-content">
+                            <h3 class="text-2xl font-bold text-rose-500 mb-6 text-center" data-config-key="vision.painPoints.title"></h3>
+                            <ul class="space-y-4 text-lg" id="pain-points-list"></ul>
+                        </div>
+                        <div class="click-gradient"></div>
                     </div>
-                    <div class="bg-sky-600 text-white p-8 rounded-xl shadow-2xl">
-                        <h3 class="text-2xl font-bold mb-6 text-center" data-config-key="vision.solutions.title"></h3>
-                         <ul class="space-y-4 text-lg" id="solutions-list"></ul>
+                    <div class="glass-component">
+                        <div class="glass-effect"></div>
+                        <div class="glass-tint"></div>
+                        <div class="glass-shine"></div>
+                        <div class="glass-content">
+                            <h3 class="text-2xl font-bold text-blue-400 mb-6 text-center" data-config-key="vision.solutions.title"></h3>
+                            <ul class="space-y-4 text-lg" id="solutions-list"></ul>
+                        </div>
+                        <div class="click-gradient"></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="credibility" class="py-16 md:py-24 bg-slate-100 section-fade-in">
+        <section id="credibility" class="py-16 md:py-24 section-fade-in">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
-                    <h2 class="text-3xl md:text-4xl font-bold text-slate-800" data-config-key="credibility.title"></h2>
-                    <p class="mt-4 text-slate-500 max-w-2xl mx-auto" data-config-key="credibility.subtitle"></p>
+                    <h2 class="text-3xl md:text-4xl font-bold" data-config-key="credibility.title"></h2>
+                    <p class="mt-4 text-white/70 max-w-2xl mx-auto" data-config-key="credibility.subtitle"></p>
                 </div>
-                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 text-center" id="metrics-grid"></div>
-                 <div class="mt-12 text-center text-sm text-slate-400">
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 text-center" id="metrics-grid">
+                    <!-- Metrics will be populated by JS -->
+                </div>
+                <div class="mt-12 text-center text-sm text-white/50">
                     <p data-config-key="credibility.footnote"></p>
                 </div>
             </div>
@@ -76,55 +131,75 @@
         <section id="compass" class="py-16 md:py-24 section-fade-in">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
-                    <h2 class="text-3xl md:text-4xl font-bold text-slate-800" data-config-key="compass.title"></h2>
-                    <p class="mt-4 text-slate-500 max-w-3xl mx-auto" data-config-key="compass.subtitle"></p>
+                    <h2 class="text-3xl md:text-4xl font-bold" data-config-key="compass.title"></h2>
+                    <p class="mt-4 text-white/70 max-w-3xl mx-auto" data-config-key="compass.subtitle"></p>
                 </div>
                 <div class="max-w-6xl mx-auto">
                     <div class="grid lg:grid-cols-2 gap-8 lg:gap-12">
-                        <div id="compass-controls" class="space-y-6"></div>
-                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-slate-200 flex flex-col">
-                            <h3 class="text-2xl font-bold text-slate-800 mb-4 text-center" data-config-key="compass.resultCard.title"></h3>
-                            <div id="recommendation-output" class="text-slate-600 mb-6 space-y-4 flex-grow min-h-[250px] flex flex-col justify-center">
-                                <div id="recommendation-placeholder">
-                                    <p class="text-center text-slate-500" data-config-key="compass.resultCard.placeholder"></p>
-                                </div>
-                                <div id="recommendation-loading" class="hidden text-center">
-                                    <div class="spinner mx-auto"></div>
-                                    <p class="mt-4 text-sky-600 font-semibold animate-pulse" data-config-key="compass.resultCard.loading"></p>
-                                </div>
-                                <div id="recommendation-details" class="hidden space-y-4">
-                                     <div>
-                                        <h4 class="font-semibold text-slate-800" data-config-key="compass.resultCard.focusTitle"></h4>
-                                        <p id="rec-focus" class="text-sm mt-1"></p>
-                                     </div>
-                                     <div>
-                                        <h4 class="font-semibold text-slate-800" data-config-key="compass.resultCard.contentTitle"></h4>
-                                        <p id="rec-content" class="text-sm mt-1"></p>
-                                     </div>
-                                     <div>
-                                        <h4 class="font-semibold text-slate-800" data-config-key="compass.resultCard.comboTitle"></h4>
-                                        <p id="rec-combo" class="text-sm mt-1"></p>
-                                     </div>
-                                </div>
-                                <div id="recommendation-error" class="hidden text-center">
-                                     <p class="text-rose-500 font-semibold" id="recommendation-error-msg" data-config-key="compass.resultCard.error"></p>
-                                </div>
+                        <div>
+                            <div id="compass-controls" class="space-y-6"></div>
+                            <div class="mt-6">
+                                <button id="generate-recommendation-btn" class="liquid-glass-btn">
+                                    <div class="liquid-glass-effect"></div>
+                                    <div class="liquid-glass-tint"></div>
+                                    <div class="liquid-glass-shine"></div>
+                                    <div class="liquid-glass-content !py-2.5 !px-6 !text-base !font-medium flex items-center justify-center gap-2">
+                                        <span data-config-key="compass.resultCard.generateBtn">生成个性化方案</span>
+                                        <span id="generate-recommendation-spinner" class="spinner-sm hidden"></span>
+                                    </div>
+                                    <div class="click-gradient"></div>
+                                </button>
                             </div>
-                            <div class="chart-container mt-auto">
-                                <canvas id="recommendationChart"></canvas>
+                        </div>
+                        <div class="glass-component">
+                            <div class="glass-effect"></div>
+                            <div class="glass-tint"></div>
+                            <div class="glass-shine"></div>
+                            <div class="glass-content flex flex-col items-center justify-center">
+                                <h3 class="text-2xl font-bold mb-4 text-center" data-config-key="compass.resultCard.title"></h3>
+                                <div id="recommendation-output" class="text-white/80 mb-4 space-y-4 flex-grow min-h-[200px] flex flex-col justify-center w-full">
+                                    <div id="recommendation-placeholder" class="text-center">
+                                        <p class="text-center text-white/50" data-config-key="compass.resultCard.placeholder"></p>
+                                    </div>
+                                    <div id="recommendation-loading" class="hidden text-center">
+                                        <div class="spinner mx-auto"></div>
+                                        <p class="mt-4 text-blue-400 font-semibold animate-pulse" data-config-key="compass.resultCard.loading"></p>
+                                    </div>
+                                    <div id="recommendation-details" class="hidden space-y-4">
+                                        <div>
+                                            <h4 class="font-semibold" data-config-key="compass.resultCard.focusTitle"></h4>
+                                            <p id="rec-focus" class="text-sm mt-1"></p>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold" data-config-key="compass.resultCard.contentTitle"></h4>
+                                            <p id="rec-content" class="text-sm mt-1"></p>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold" data-config-key="compass.resultCard.comboTitle"></h4>
+                                            <p id="rec-combo" class="text-sm mt-1"></p>
+                                        </div>
+                                    </div>
+                                    <div id="recommendation-error" class="hidden text-center">
+                                        <p class="text-rose-500 font-semibold" id="recommendation-error-msg" data-config-key="compass.resultCard.error"></p>
+                                    </div>
+                                </div>
+                                <div class="chart-container mt-2 w-full max-w-md mx-auto">
+                                    <canvas id="recommendationChart"></canvas>
+                                </div>
+                                <p class="text-center mt-3 text-sm text-white/50" data-config-key="compass.resultCard.chartFootnote"></p>
                             </div>
-                            <p class="text-center mt-4 text-sm text-slate-400" data-config-key="compass.resultCard.chartFootnote"></p>
+                            <div class="click-gradient"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="modules" class="py-16 md:py-24 bg-slate-100 section-fade-in">
+        <section id="modules" class="py-16 md:py-24 section-fade-in">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
-                    <h2 class="text-3xl md:text-4xl font-bold text-slate-800" data-config-key="modules.title"></h2>
-                    <p class="mt-4 text-slate-500 max-w-2xl mx-auto" data-config-key="modules.subtitle"></p>
+                    <h2 class="text-3xl md:text-4xl font-bold" data-config-key="modules.title"></h2>
+                    <p class="mt-4 text-white/70 max-w-2xl mx-auto" data-config-key="modules.subtitle"></p>
                 </div>
                 <div class="flex justify-center flex-wrap gap-3 mb-8" id="module-filters"></div>
                 <div id="module-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
@@ -134,38 +209,53 @@
         <section id="process" class="py-16 md:py-24 section-fade-in">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
-                    <h2 class="text-3xl md:text-4xl font-bold text-slate-800" data-config-key="process.title"></h2>
-                    <p class="mt-4 text-slate-500 max-w-2xl mx-auto" data-config-key="process.subtitle"></p>
+                    <h2 class="text-3xl md:text-4xl font-bold" data-config-key="process.title"></h2>
+                    <p class="mt-4 text-white/70 max-w-2xl mx-auto" data-config-key="process.subtitle"></p>
                 </div>
                 <div class="max-w-4xl mx-auto grid md:grid-cols-4 gap-4 text-center" id="process-steps"></div>
             </div>
         </section>
 
-        <section id="contact" class="py-16 md:py-24 bg-sky-700 text-white section-fade-in">
+        <section id="contact" class="py-16 md:py-24 text-white section-fade-in">
             <div class="container mx-auto px-6 text-center">
                 <h2 class="text-3xl md:text-4xl font-bold" data-config-key="contact.title"></h2>
-                <p class="mt-4 max-w-2xl mx-auto text-sky-200" data-config-key="contact.subtitle"></p>
+                <p class="mt-4 max-w-2xl mx-auto text-white/70" data-config-key="contact.subtitle"></p>
                 <div class="mt-10 max-w-xl mx-auto">
                     <form id="contact-form" class="grid sm:grid-cols-2 gap-4">
-                        <input type="text" class="p-3 rounded-md text-slate-800 w-full" data-config-key-placeholder="contact.form.namePlaceholder">
-                        <input type="text" class="p-3 rounded-md text-slate-800 w-full" data-config-key-placeholder="contact.form.companyPlaceholder">
-                        <input type="email" class="p-3 rounded-md text-slate-800 w-full sm:col-span-2" data-config-key-placeholder="contact.form.emailPlaceholder">
-                        <textarea id="contact-needs" rows="4" class="p-3 rounded-md text-slate-800 w-full sm:col-span-2" data-config-key-placeholder="contact.form.needsPlaceholder"></textarea>
+                        <input type="text" class="p-3 rounded-md w-full" data-config-key-placeholder="contact.form.namePlaceholder">
+                        <input type="text" class="p-3 rounded-md w-full" data-config-key-placeholder="contact.form.companyPlaceholder">
+                        <input type="email" class="p-3 rounded-md w-full sm:col-span-2" data-config-key-placeholder="contact.form.emailPlaceholder">
+                        <textarea id="contact-needs" rows="4" class="p-3 rounded-md w-full sm:col-span-2" data-config-key-placeholder="contact.form.needsPlaceholder"></textarea>
                         <div class="sm:col-span-2">
-                             <button type="button" id="optimize-needs-btn" class="w-full mb-3 py-2 px-4 border border-sky-300 text-sky-200 rounded-full hover:bg-sky-600 hover:text-white transition-colors flex items-center justify-center gap-2">
-                                <span data-config-key="contact.form.optimizeBtn"></span>
-                                <span id="optimize-spinner" class="spinner-sm hidden"></span>
+                            <button type="button" id="optimize-needs-btn" class="w-full mb-3 flex items-center justify-center gap-2 liquid-glass-btn">
+                                <div class="liquid-glass-effect"></div>
+                                <div class="liquid-glass-tint"></div>
+                                <div class="liquid-glass-shine"></div>
+                                <div class="liquid-glass-content text-center">
+                                    <span data-config-key="contact.form.optimizeBtn"></span>
+                                    <span id="optimize-spinner" class="spinner-sm hidden"></span>
+                                </div>
+                                <div class="click-gradient"></div>
                             </button>
                             <p id="optimize-error" class="text-amber-300 text-sm mb-2 hidden"></p>
                         </div>
-                        <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-8 rounded-full text-lg transition-transform hover:scale-105 sm:col-span-2" data-config-key="contact.form.submitBtn"></button>
+                        <button type="submit" class="sm:col-span-2 liquid-glass-btn" data-config-key="contact.form.submitBtn">
+                            <div class="liquid-glass-effect"></div>
+                            <div class="liquid-glass-tint"></div>
+                            <div class="liquid-glass-shine"></div>
+                            <div class="liquid-glass-content text-center">
+                                <span data-config-key="contact.form.submitBtn"></span>
+                            </div>
+                            <div class="liquid-pulse"></div>
+                            <div class="click-gradient"></div>
+                        </button>
                     </form>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="bg-slate-800 text-slate-400 py-8">
+    <footer class="bg-black text-white/50 py-8">
         <div class="container mx-auto px-6 text-center text-sm">
             <p data-config-key="footer.copyright"></p>
             <p class="mt-2" data-config-key="footer.contactInfo"></p>
@@ -174,45 +264,36 @@
 
     <!-- Modals -->
     <div id="module-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h3 id="modal-title" class="text-2xl font-bold text-slate-800 mb-4"></h3>
-            <div id="modal-body" class="text-slate-600 min-h-[150px]">
-                <div id="modal-loading" class="text-center py-8">
-                    <div class="spinner mx-auto"></div>
-                    <p class="mt-4 text-sky-600 font-semibold" data-config-key="modules.modal.loading"></p>
+        <div class="modal-content glass-component">
+            <div class="glass-effect"></div>
+            <div class="glass-tint"></div>
+            <div class="glass-shine"></div>
+            <div class="glass-content">
+                <h3 id="modal-title" class="text-2xl font-bold mb-4"></h3>
+                <div id="modal-body" class="text-white/80 min-h-[150px]">
+                    <div id="modal-loading" class="text-center py-8">
+                        <div class="spinner mx-auto"></div>
+                        <p class="mt-4 text-blue-400 font-semibold" data-config-key="modules.modal.loading"></p>
+                    </div>
+                    <div id="modal-text-content" class="hidden whitespace-pre-wrap"></div>
+                    <div id="modal-error" class="hidden text-center py-8">
+                        <p id="modal-error-msg" class="text-rose-500 font-semibold" data-config-key="modules.modal.error"></p>
+                    </div>
                 </div>
-                <div id="modal-text-content" class="hidden whitespace-pre-wrap"></div>
-                <div id="modal-error" class="hidden text-center py-8">
-                     <p id="modal-error-msg" class="text-rose-500 font-semibold" data-config-key="modules.modal.error"></p>
-                </div>
-            </div>
-            <div class="mt-6 text-right">
-                <button id="modal-close-btn" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-6 rounded-full" data-config-key="modules.modal.closeBtn"></button>
-            </div>
-        </div>
-    </div>
-
-    <div id="settings-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h3 class="text-2xl font-bold text-slate-800 mb-6" data-config-key="settingsModal.title"></h3>
-            <div class="space-y-4">
-                <div>
-                    <label for="api-key-input" class="block text-sm font-medium text-slate-700" data-config-key="settingsModal.apiKeyLabel"></label>
-                    <input type="password" id="api-key-input" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm" data-config-key-placeholder="settingsModal.apiKeyPlaceholder">
-                </div>
-                <div>
-                    <label for="api-endpoint-input" class="block text-sm font-medium text-slate-700" data-config-key="settingsModal.endpointLabel"></label>
-                    <input type="text" id="api-endpoint-input" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm" data-config-key-placeholder="settingsModal.endpointPlaceholder">
-                </div>
-                <div>
-                    <label for="api-model-input" class="block text-sm font-medium text-slate-700" data-config-key="settingsModal.modelLabel"></label>
-                    <input type="text" id="api-model-input" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm" data-config-key-placeholder="settingsModal.modelPlaceholder">
+                <div class="mt-6 text-right">
+                    <button id="modal-close-btn" class="liquid-glass-btn" data-config-key="modules.modal.closeBtn">
+                        <div class="liquid-glass-effect"></div>
+                        <div class="liquid-glass-tint"></div>
+                        <div class="liquid-glass-shine"></div>
+                        <div class="liquid-glass-content !py-2 !px-6">
+                            <span data-config-key="modules.modal.closeBtn"></span>
+                        </div>
+                        <div class="liquid-pulse"></div>
+                        <div class="click-gradient"></div>
+                    </button>
                 </div>
             </div>
-            <div class="mt-6 flex justify-end gap-4">
-                <button id="settings-close-btn" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-6 rounded-full" data-config-key="settingsModal.cancelBtn"></button>
-                <button id="settings-save-btn" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-6 rounded-full" data-config-key="settingsModal.saveBtn"></button>
-            </div>
+            <div class="click-gradient"></div>
         </div>
     </div>
 

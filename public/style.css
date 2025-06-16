@@ -1,83 +1,414 @@
+:root {
+    --color-background: #0c0c0e;
+    --color-card: rgba(20, 20, 20, 0.6);
+    --color-primary: #0077ed;
+    --color-secondary: #6e6e73;
+    --color-text: rgba(255, 255, 255, 0.95);
+    --color-text-secondary: rgba(255, 255, 255, 0.75);
+    --color-border: rgba(255, 255, 255, 0.05);
+    --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.3);
+    --blur-effect: blur(8px);
+    --glow-effect: 0 0 15px rgba(0, 119, 237, 0.4);
+    --glass-text-input: rgba(30, 30, 30, 0.6);
+    --glass-text-input-blur: blur(10px);
+    --glass-btn-blur: blur(5px);
+}
+
 body {
     font-family: 'Noto Sans SC', sans-serif;
-    background-color: #f8fafc; /* slate-50 */
+    background-color: var(--color-background);
+    color: var(--color-text);
+    min-height: 100vh;
+    position: relative;
 }
+
+/* SVG滤镜 - 添加到body开头 */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    background: linear-gradient(-45deg, #0f0f0f, #121212, #181818, #1a1a1a);
+    background-size: 400% 400%;
+    animation: gradient-flow 20s linear infinite;
+}
+
+@keyframes gradient-flow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 玻璃拟态效果卡片 */
+.glass-component {
+    background: rgba(30, 30, 35, 0.75) !important;
+    border-radius: 24px !important;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.6);
+    transform: translateZ(0);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+}
+
+.glass-component:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 3px 10px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.glass-effect {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    filter: url(#glass-distortion);
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+}
+
+.glass-tint {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.2) 100%);
+}
+
+.glass-shine {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.glass-content {
+    position: relative;
+    z-index: 3;
+    padding: 2rem;
+    color: white;
+}
+
+/* 全局玻璃效果应用 */
+header {
+    background: rgba(10, 10, 10, 0.8) !important;
+    backdrop-filter: var(--blur-effect) !important;
+    -webkit-backdrop-filter: var(--blur-effect) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.bg-white, .bg-slate-100, .bg-white.p-6, .bg-white.p-8, .bg-white.rounded-lg, .bg-white.rounded-xl {
+    background: rgba(30, 30, 35, 0.75) !important;
+    backdrop-filter: var(--blur-effect);
+    -webkit-backdrop-filter: var(--blur-effect);
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+    border-radius: 24px !important;
+}
+
+/* 按钮样式 */
+.bg-sky-600, .bg-sky-700, .hover\:bg-sky-700,
+.bg-blue-600, .bg-blue-700, .hover\:bg-blue-700 {
+    background: linear-gradient(135deg, #0077ed, #0055cc) !important;
+    border: none !important;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 119, 237, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.bg-amber-500, .bg-amber-600, .hover\:bg-amber-600 {
+    background: linear-gradient(135deg, #0077ed, #00a2ff) !important;
+    border: none !important;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 119, 237, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.text-sky-600, .text-blue-600, .text-blue-400 {
+    color: var(--color-primary) !important;
+    text-shadow: 0 0 10px rgba(0, 119, 237, 0.3);
+}
+
+/* 按钮圆角和效果 */
+button, .rounded-full {
+    border-radius: 30px !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.6);
+}
+
+button:hover, .rounded-full:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
 .chart-container {
     position: relative;
     width: 100%;
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
-    height: 300px;
-    max-height: 400px;
+    max-width: 400px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    height: 350px;
+    max-height: 450px;
+    display: flex;
+    justify-content: center;
 }
+
 @media (min-width: 768px) {
     .chart-container {
-        height: 350px;
+        height: 400px;
     }
 }
-.glow-btn {
-    box-shadow: 0 0 5px #38bdf8, 0 0 10px #38bdf8;
+
+/* 高级液态玻璃按钮 */
+.liquid-glass-btn {
+    position: relative;
+    display: inline-block;
+    padding: 0.85rem 2.5rem;
+    border-radius: 30px;
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-align: center;
+    overflow: hidden;
+    cursor: pointer;
+    transform: translateZ(0);
+    transition: all 0.45s cubic-bezier(0.1, 0.7, 0.3, 1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 
+                0 0 40px rgba(0, 225, 255, 0.8),
+                inset 0 0 3px rgba(120, 240, 255, 0.9);
 }
+
+/* 确保默认情况下所有液态玻璃按钮都是透明的 */
+.liquid-glass-btn {
+    background: transparent !important;
+}
+
+.liquid-glass-btn:hover {
+    transform: translateY(-6px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 
+                0 0 70px rgba(30, 235, 255, 0.9),
+                inset 0 0 8px rgba(150, 250, 255, 1);
+}
+
+/* 统一所有按钮的悬停效果 */
+.liquid-glass-btn:hover .liquid-glass-effect {
+    opacity: 0.75;
+    transform: scale(1.05);
+}
+
+.liquid-glass-btn:hover .liquid-glass-tint {
+    opacity: 0.85;
+    background: linear-gradient(135deg, rgba(30, 140, 180, 0.5) 0%, rgba(20, 110, 150, 0.4) 100%);
+}
+
+.liquid-glass-btn:hover .liquid-glass-shine {
+    border-top-color: rgba(255, 255, 255, 0.6);
+}
+
+.liquid-glass-content {
+    position: relative;
+    z-index: 3;
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    color: white;
+}
+
+.liquid-pulse {
+    position: absolute;
+    z-index: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(150, 255, 255, 0.9) 0%, rgba(100, 230, 255, 0.6) 40%, rgba(40, 200, 255, 0) 70%);
+    border-radius: 50%;
+    opacity: 0;
+    animation: pulse 3s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.8);
+        opacity: 0;
+    }
+}
+
+.glow-btn {
+    box-shadow: var(--glow-effect);
+}
+
 .section-fade-in {
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
+
 .section-fade-in.visible {
     opacity: 1;
     transform: translateY(0);
 }
+
 .compass-btn {
-     transition: all 0.2s ease-in-out;
+    background: rgba(30, 30, 35, 0.5);
+    backdrop-filter: var(--glass-btn-blur);
+    -webkit-backdrop-filter: var(--glass-btn-blur);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--color-text-secondary);
+    transition: all 0.2s ease;
+    min-width: 100px;
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 38px;
 }
-.compass-btn.active {
-    background-color: #0284c7; /* sky-600 */
+
+.compass-btn:hover {
+    background: rgba(40, 40, 45, 0.7);
+    border-color: rgba(255, 255, 255, 0.15);
     color: white;
-    transform: scale(1.05);
-    box-shadow: 0 4px 14px 0 rgba(2, 132, 199, 0.39);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
+
+.compass-btn.active {
+    background: linear-gradient(135deg, rgba(0, 119, 237, 0.7), rgba(0, 85, 204, 0.7));
+    color: white !important;
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 119, 237, 0.3), 0 3px 10px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 优化五维罗盘按钮容器 */
+#compass-controls > div {
+    margin-bottom: 26px;
+    background: rgba(20, 20, 25, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+#compass-controls > div:last-child {
+    margin-bottom: 16px;
+}
+
+#compass-controls > div > h3 {
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 8px;
+    color: #3b82f6;
+}
+
+#compass-controls .flex.flex-wrap.gap-3 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px !important;
+    margin-top: 12px;
+}
+
 .tooltip-container {
     position: relative;
     display: inline-block;
 }
+
 .tooltip-text {
     visibility: hidden;
-    width: 240px;
-    background-color: #334155; /* slate-700 */
+    width: 300px;
+    background-color: rgba(15, 15, 20, 0.95);
+    backdrop-filter: var(--blur-effect);
+    -webkit-backdrop-filter: var(--blur-effect);
     color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 8px 12px;
+    text-align: left;
+    border-radius: 12px;
+    padding: 12px 16px;
     position: absolute;
     z-index: 10;
     bottom: 125%;
     left: 50%;
-    margin-left: -120px;
+    margin-left: -150px;
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: opacity 0.3s, transform 0.3s;
     font-size: 13px;
     line-height: 1.6;
     pointer-events: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transform: translateY(10px);
+    white-space: pre-line;
 }
+
 .tooltip-container:hover .tooltip-text {
     visibility: visible;
     opacity: 1;
+    transform: translateY(0);
 }
+
+/* 增强tooltip内容样式 */
+.tooltip-text strong {
+    color: #3b82f6;
+    font-weight: 600;
+}
+
+/* 针对五维罗盘选项定制的tooltip样式 */
+#compass-controls .tooltip-text {
+    width: 340px;
+    margin-left: -170px;
+    font-size: 12.5px;
+    line-height: 1.5;
+}
+
+#compass-controls .tooltip-container {
+    display: inline-block;
+}
+
+/* 特殊标记样式 */
+#compass-controls .tooltip-text [class^="【"] {
+    font-weight: 600;
+    color: #3b82f6;
+}
+
+/* 滤镜颜色组 */
+.text-rose-500 { color: #ff2d55 !important; }
+.text-slate-500, .text-slate-600, .text-slate-700 { color: var(--color-text-secondary) !important; }
+.text-slate-800 { color: var(--color-text) !important; }
+.bg-slate-200 { background-color: rgba(40, 40, 45, 0.5) !important; }
+
 .spinner, .spinner-sm {
-    border: 5px solid #FFF;
-    border-bottom-color: #0ea5e9;
+    border: 5px solid rgba(255, 255, 255, 0.1);
+    border-bottom-color: var(--color-primary);
     border-radius: 50%;
     display: inline-block;
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
 }
+
 .spinner { width: 48px; height: 48px; }
 .spinner-sm { width: 20px; height: 20px; border-width: 3px; }
+
 @keyframes rotation {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
 /* Modal Styles */
 .modal-overlay {
     position: fixed;
@@ -86,6 +417,8 @@ body {
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: var(--blur-effect);
+    -webkit-backdrop-filter: var(--blur-effect);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -94,27 +427,237 @@ body {
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
 }
+
 .modal-overlay.visible {
     opacity: 1;
     visibility: visible;
 }
+
 .modal-content {
-    background: white;
+    background: rgba(30, 30, 35, 0.75);
+    backdrop-filter: var(--blur-effect);
+    -webkit-backdrop-filter: var(--blur-effect);
     padding: 2rem;
-    border-radius: 0.75rem;
+    border-radius: 24px;
     width: 90%;
     max-width: 600px;
     transform: scale(0.95);
     transition: transform 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
 }
+
 .modal-overlay.visible .modal-content {
     transform: scale(1);
 }
+
 .settings-btn-icon {
     width: 24px;
     height: 24px;
     transition: transform 0.5s ease;
 }
+
 .settings-btn:hover .settings-btn-icon {
     transform: rotate(90deg);
+}
+
+/* 底部高级灰 */
+footer.bg-slate-800 {
+    background-color: #0a0a0a !important;
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* 联系表单区域 */
+.bg-sky-700 {
+    background: linear-gradient(135deg, #0f0f0f, #121212) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.bg-sky-700::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    filter: url(#glass-distortion);
+    backdrop-filter: blur(5px);
+    isolation: isolate;
+}
+
+/* 模块过滤器按钮 */
+.filter-btn {
+    background: rgba(30, 30, 35, 0.75) !important;
+    backdrop-filter: var(--blur-effect);
+    -webkit-backdrop-filter: var(--blur-effect);
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: var(--color-text-secondary) !important;
+    border-radius: 30px !important;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.filter-btn.active {
+    background: linear-gradient(135deg, #0077ed, #0055cc) !important;
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 20px rgba(0, 119, 237, 0.3), 0 3px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 调整筛选按钮激活状态，使其更内敛 */
+.filter-btn.active .liquid-glass-effect {
+    opacity: 0.8;
+}
+
+.filter-btn.active .liquid-glass-tint {
+    background: linear-gradient(135deg, rgba(40, 120, 160, 0.7) 0%, rgba(20, 90, 130, 0.6) 100%);
+    opacity: 0.9;
+}
+
+.filter-btn.active .liquid-glass-content {
+    text-shadow: 0 0 10px rgba(150, 240, 255, 0.8);
+}
+
+/* 增强液态玻璃效果文本框 */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+textarea,
+select {
+    background: rgba(30, 30, 35, 0.75) !important;
+    backdrop-filter: var(--glass-text-input-blur) !important;
+    -webkit-backdrop-filter: var(--glass-text-input-blur) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 12px !important;
+    color: var(--color-text) !important;
+    transition: all 0.3s ease !important;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--color-primary) !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2px rgba(0, 119, 237, 0.2) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+#contact input,
+#contact textarea {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+}
+
+#contact input:focus,
+#contact textarea:focus {
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2) !important;
+}
+
+#contact input::placeholder,
+#contact textarea::placeholder {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* 点击渐变效果 */
+.click-gradient {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(0,119,237,0.2) 40%, rgba(0,119,237,0.1) 70%, rgba(0,119,237,0) 100%);
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 4;
+}
+
+.clicked .click-gradient {
+    animation: gradient-ripple 0.6s ease-out;
+}
+
+@keyframes gradient-ripple {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+}
+
+/* 背景区域样式修改 */
+#hero, #vision, #credibility, #compass, #modules, #process, #contact {
+    background: var(--color-background) !important;
+}
+
+/* 文本颜色修改 */
+.text-slate-600, .text-slate-700, .text-slate-800 {
+    color: var(--color-text) !important;
+}
+
+.text-slate-400, .text-slate-500 {
+    color: var(--color-text-secondary) !important;
+}
+
+/* 特殊区域样式 */
+#credibility {
+    position: relative;
+    overflow: hidden;
+}
+
+#credibility::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: -1;
+}
+
+/* 图表样式调整 */
+canvas {
+    filter: brightness(1.2) contrast(1.1);
+}
+
+/* 增强按钮的立体效果 */
+.glass-component .glass-content {
+    transform: translateZ(0);
+}
+
+/* 为不同组件添加微妙的发光边缘 */
+.process-step.glass-component {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.feature-card.glass-component {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 5px 15px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* 增强组件悬停状态 */
+.glass-component:hover .glass-shine {
+    opacity: 0.8;
+}
+
+/* 增强按钮的可见度 */
+button.glass-component, a.glass-component {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 3px 8px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+button.glass-component:hover, a.glass-component:hover {
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4), 0 5px 10px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
 }

@@ -499,7 +499,8 @@ function initModules() {
         document.querySelectorAll('#module-grid .glass-component').forEach(card => {
             card.addEventListener('click', function() {
                 const contentId = this.dataset.content;
-                const module = CONFIG.modules.list.find(m => contentId === `${m.category}-${module.title.replace(/\s+/g, '-').toLowerCase()}`);
+                // FIX: The original code had a bug here. It used 'module.title' inside the find callback instead of 'm.title'.
+                const module = CONFIG.modules.list.find(m => contentId === `${m.category}-${m.title.replace(/\s+/g, '-').toLowerCase()}`);
                 if (module) {
                     const modal = document.getElementById('module-modal');
                     document.getElementById('modal-title').textContent = module.title;

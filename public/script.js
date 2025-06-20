@@ -804,13 +804,23 @@ function initContactForm() {
         直接输出优化后的文本即可，不需要任何额外的问候或解释。`;
 
         try {
-            const optimizedText = await callBackendProxy(prompt);
-            needsTextarea.value = optimizedText;
-            needsTextarea.style.height = 'auto';
-            needsTextarea.style.height = needsTextarea.scrollHeight + 'px';
+            // --- FIX START: Correctly handle the JSON response from the server ---
+            // The server now returns an object like { text: "..." }
+            const responseData = await callBackendProxy(prompt);
+
+            // Check if the response has the expected 'text' property
+            if (responseData && typeof responseData.text === 'string') {
+                needsTextarea.value = responseData.text;
+                needsTextarea.style.height = 'auto';
+                needsTextarea.style.height = needsTextarea.scrollHeight + 'px';
+            } else {
+                // Handle cases where the response is not as expected, even if the request was successful
+                throw new Error('从服务器返回了意外的数据格式。');
+            }
+            // --- FIX END ---
         } catch (error) {
             console.error('Error optimizing needs:', error);
-            optimizeError.textContent = error.message.includes('API配置不完整') ? error.message : "优化失败，请稍后再试。";
+            optimizeError.textContent = "优化失败，请稍后再试。" + (error.message ? ` (${error.message})` : '');
             optimizeError.classList.remove('hidden');
         } finally {
             optimizeBtn.disabled = false;

@@ -183,7 +183,7 @@ button:hover, .rounded-full:hover {
     transform: translateZ(0);
     transition: all 0.45s cubic-bezier(0.1, 0.7, 0.3, 1);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 
-                0 0 40px rgba(0, 225, 255, 0.8),
+                0 0 10px rgba(0, 225, 255, 0.8),
                 inset 0 0 3px rgba(120, 240, 255, 0.9);
 }
 
@@ -195,7 +195,7 @@ button:hover, .rounded-full:hover {
 .liquid-glass-btn:hover {
     transform: translateY(-6px) scale(1.05);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 
-                0 0 70px rgba(30, 235, 255, 0.9),
+                0 0 30px rgba(30, 235, 255, 0.9),
                 inset 0 0 8px rgba(150, 250, 255, 1);
 }
 
@@ -500,6 +500,7 @@ footer.bg-slate-800 {
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
+    padding: 0.75rem 1.5rem !important;
 }
 
 .filter-btn.active {
@@ -522,6 +523,8 @@ footer.bg-slate-800 {
 
 .filter-btn.active .liquid-glass-content {
     text-shadow: 0 0 10px rgba(150, 240, 255, 0.8);
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
 }
 
 /* 增强液态玻璃效果文本框 */
@@ -660,4 +663,29 @@ button.glass-component, a.glass-component {
 
 button.glass-component:hover, a.glass-component:hover {
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4), 0 5px 10px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* 调整hero和vision部分之间的间距 */
+#hero {
+    padding-top: 5rem !important;    /* 80px */
+    padding-bottom: 6rem !important; /* 96px - 增加了底部间距 */
+}
+
+@media (min-width: 768px) {
+    #hero {
+        padding-top: 8rem !important;    /* 128px */
+        padding-bottom: 8rem !important; /* 128px - 增加了底部间距 */
+    }
+}
+
+#vision {
+    padding-top: 6rem !important;    /* 96px - 增加了顶部间距 */
+    padding-bottom: 4rem !important; /* 64px */
+}
+
+@media (min-width: 768px) {
+    #vision {
+        padding-top: 8rem !important;    /* 128px - 增加了顶部间距 */
+        padding-bottom: 6rem !important; /* 96px */
+    }
 }

@@ -307,6 +307,7 @@ function initCompass() {
     const recFocus = document.getElementById('rec-focus');
     const recContent = document.getElementById('rec-content');
     const recCombo = document.getElementById('rec-combo');
+    const recErrorMsg = document.getElementById('recommendation-error-msg');
     
     // Store user selections
     const userSelections = {};
@@ -441,12 +442,25 @@ function initCompass() {
         `;
 
         try {
+            // 清空之前的内容，避免残留
+            recFocus.innerHTML = '';
+            recContent.innerHTML = '';
+            recCombo.innerHTML = '';
+            
             const parsedJson = await callBackendProxy(prompt, true);
+            
+            // 确保所有字段都存在
+            if (!parsedJson || !parsedJson.focus || !parsedJson.content || (!parsedJson.combination && !parsedJson.combo)) {
+                throw new Error('API返回的数据格式不正确');
+            }
             
             // Update UI with recommendation - 使用parseMarkdown函数解析Markdown格式
             recFocus.innerHTML = parseMarkdown(parsedJson.focus);
             recContent.innerHTML = parseMarkdown(parsedJson.content);
-            recCombo.innerHTML = parseMarkdown(parsedJson.combination); // 修正：使用正确的属性名 combination 而不是 combo
+            
+            // 兼容处理combination或combo字段
+            const combinationContent = parsedJson.combination || parsedJson.combo;
+            recCombo.innerHTML = parseMarkdown(combinationContent);
             
             // 更新图表
             updateChartData({
@@ -472,6 +486,7 @@ function initCompass() {
             console.error('Error generating recommendation:', error);
             recLoading.classList.add('hidden');
             recError.classList.remove('hidden');
+            recErrorMsg.textContent = '抱歉，分析系统暂时无法响应，请稍后再试。' + (error.message ? ` (${error.message})` : '');
         }
     };
     

@@ -32,41 +32,56 @@
     </svg>
 
     <header class="bg-black/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
-        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+        <nav class="container mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
             <div class="text-xl font-bold text-sky-600" data-config-key="header.brandName"></div>
+
+            <!-- Desktop Navigation -->
             <div class="hidden md:flex space-x-8 items-center" id="nav-links-desktop">
                 <!-- Nav links will be populated by JS -->
-                <a href="#contact" class="liquid-glass-btn" data-config-key="header.contactBtn">
+                <a href="#contact" class="liquid-glass-btn !py-2 !px-5 !text-base" data-config-key="header.contactBtn">
                     <div class="liquid-glass-effect"></div>
                     <div class="liquid-glass-tint"></div>
                     <div class="liquid-glass-shine"></div>
                     <div class="liquid-glass-content">
                         <span data-config-key="header.contactBtn"></span>
                     </div>
-                    <div class="liquid-pulse"></div>
                     <div class="click-gradient"></div>
                 </a>
             </div>
+
+            <!-- Mobile Navigation Button -->
             <div class="md:hidden">
-                <a href="#contact" class="liquid-glass-btn" data-config-key="header.contactBtn">
-                    <div class="liquid-glass-effect"></div>
-                    <div class="liquid-glass-tint"></div>
-                    <div class="liquid-glass-shine"></div>
-                    <div class="liquid-glass-content !py-2 !px-4 !text-sm">
-                        <span data-config-key="header.contactBtn"></span>
-                    </div>
-                    <div class="liquid-pulse"></div>
-                    <div class="click-gradient"></div>
-                </a>
+                <button id="mobile-menu-button" class="hamburger-button z-50">
+                    <span class="line"></span>
+                    <span class="line"></span>
+                    <span class="line"></span>
+                </button>
             </div>
         </nav>
     </header>
 
+    <!-- Mobile Navigation Menu -->
+    <div id="mobile-menu" class="mobile-menu">
+        <div id="mobile-nav-links" class="flex flex-col items-center justify-center h-full space-y-8 text-2xl">
+            <!-- Mobile nav links will be populated by JS -->
+             <a href="#contact" class="liquid-glass-btn !py-2 !px-5 !text-lg" data-config-key="header.contactBtn">
+                <div class="liquid-glass-effect"></div>
+                <div class="liquid-glass-tint"></div>
+                <div class.liquid-glass-shine"></div>
+                <div class="liquid-glass-content">
+                    <span data-config-key="header.contactBtn"></span>
+                </div>
+                <div class="click-gradient"></div>
+            </a>
+        </div>
+    </div>
+
+
     <main>
-        <section id="hero" class="py-20 md:py-32">
-            <div class="container mx-auto px-6 text-center">
-                <h1 class="text-4xl md:text-6xl font-bold leading-tight" data-config-key="hero.title"></h1>
-                <p class="mt-6 text-lg md:text-xl text-white/80 max-w-3xl mx-auto" data-config-key="hero.subtitle"></p>
+        <section id="hero" class="py-20 md:py-28 text-center">
+            <div class="container mx-auto px-4 sm:px-6">
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight" data-config-key="hero.title"></h1>
+                <p class="mt-6 text-base sm:text-lg md:text-xl text-white/80 max-w-3xl mx-auto" data-config-key="hero.subtitle"></p>
                 <div class="mt-10">
                     <a href="#compass" class="liquid-glass-btn" data-config-key="hero.ctaBtn">
                         <div class="liquid-glass-effect"></div>
@@ -75,7 +90,6 @@
                         <div class="liquid-glass-content">
                             <span data-config-key="hero.ctaBtn"></span>
                         </div>
-                        <div class="liquid-pulse"></div>
                         <div class="click-gradient"></div>
                     </a>
                 </div>
@@ -83,19 +97,19 @@
         </section>
 
         <section id="vision" class="py-16 md:py-24 section-fade-in">
-            <div class="container mx-auto px-6">
+            <div class="container mx-auto px-4 sm:px-6">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl md:text-4xl font-bold" data-config-key="vision.title"></h2>
                     <p class="mt-4 text-white/70 max-w-2xl mx-auto" data-config-key="vision.subtitle"></p>
                 </div>
-                <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="grid md:grid-cols-2 gap-8 items-start">
                     <div class="glass-component">
                         <div class="glass-effect"></div>
                         <div class="glass-tint"></div>
                         <div class="glass-shine"></div>
                         <div class="glass-content">
                             <h3 class="text-2xl font-bold text-rose-500 mb-6 text-center" data-config-key="vision.painPoints.title"></h3>
-                            <ul class="space-y-4 text-lg" id="pain-points-list"></ul>
+                            <ul class="space-y-4 text-base md:text-lg" id="pain-points-list"></ul>
                         </div>
                         <div class="click-gradient"></div>
                     </div>
@@ -105,7 +119,7 @@
                         <div class="glass-shine"></div>
                         <div class="glass-content">
                             <h3 class="text-2xl font-bold text-blue-400 mb-6 text-center" data-config-key="vision.solutions.title"></h3>
-                            <ul class="space-y-4 text-lg" id="solutions-list"></ul>
+                            <ul class="space-y-4 text-base md:text-lg" id="solutions-list"></ul>
                         </div>
                         <div class="click-gradient"></div>
                     </div>
@@ -114,12 +128,12 @@
         </section>
 
         <section id="credibility" class="py-16 md:py-24 section-fade-in">
-            <div class="container mx-auto px-6">
+            <div class="container mx-auto px-4 sm:px-6">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl md:text-4xl font-bold" data-config-key="credibility.title"></h2>
                     <p class="mt-4 text-white/70 max-w-2xl mx-auto" data-config-key="credibility.subtitle"></p>
                 </div>
-                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 text-center" id="metrics-grid">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 text-center" id="metrics-grid">
                     <!-- Metrics will be populated by JS -->
                 </div>
                 <div class="mt-12 text-center text-sm text-white/50">
@@ -129,7 +143,7 @@
         </section>
 
         <section id="compass" class="py-16 md:py-24 section-fade-in">
-            <div class="container mx-auto px-6">
+            <div class="container mx-auto px-4 sm:px-6">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl md:text-4xl font-bold" data-config-key="compass.title"></h2>
                     <p class="mt-4 text-white/70 max-w-3xl mx-auto" data-config-key="compass.subtitle"></p>
@@ -183,10 +197,10 @@
                                         <p class="text-rose-500 font-semibold" id="recommendation-error-msg" data-config-key="compass.resultCard.error"></p>
                                     </div>
                                 </div>
-                                <div class="chart-container mt-2 w-full max-w-md mx-auto">
+                                <div class="chart-container mt-2 w-full mx-auto">
                                     <canvas id="recommendationChart"></canvas>
                                 </div>
-                                <p class="text-center mt-3 text-sm text-white/50" data-config-key="compass.resultCard.chartFootnote"></p>
+                                <p class="text-center mt-3 text-xs md:text-sm text-white/50" data-config-key="compass.resultCard.chartFootnote"></p>
                             </div>
                             <div class="click-gradient"></div>
                         </div>
@@ -196,34 +210,34 @@
         </section>
 
         <section id="modules" class="py-16 md:py-24 section-fade-in">
-            <div class="container mx-auto px-6">
+            <div class="container mx-auto px-4 sm:px-6">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl md:text-4xl font-bold" data-config-key="modules.title"></h2>
                     <p class="mt-4 text-white/70 max-w-2xl mx-auto" data-config-key="modules.subtitle"></p>
                 </div>
-                <div class="flex justify-center flex-wrap gap-3 mb-8" id="module-filters"></div>
-                <div id="module-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                <div class="flex justify-center flex-wrap gap-2 md:gap-3 mb-8" id="module-filters"></div>
+                <div id="module-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
             </div>
         </section>
 
         <section id="process" class="py-16 md:py-24 section-fade-in">
-            <div class="container mx-auto px-6">
+            <div class="container mx-auto px-4 sm:px-6">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl md:text-4xl font-bold" data-config-key="process.title"></h2>
                     <p class="mt-4 text-white/70 max-w-2xl mx-auto" data-config-key="process.subtitle"></p>
                 </div>
-                <div class="max-w-4xl mx-auto grid md:grid-cols-4 gap-4 text-center" id="process-steps"></div>
+                <div class="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-center" id="process-steps"></div>
             </div>
         </section>
 
         <section id="contact" class="py-16 md:py-24 text-white section-fade-in">
-            <div class="container mx-auto px-6 text-center">
+            <div class="container mx-auto px-4 sm:px-6 text-center">
                 <h2 class="text-3xl md:text-4xl font-bold" data-config-key="contact.title"></h2>
                 <p class="mt-4 max-w-2xl mx-auto text-white/70" data-config-key="contact.subtitle"></p>
                 <div class="mt-10 max-w-xl mx-auto">
-                    <form id="contact-form" class="grid sm:grid-cols-2 gap-4">
-                        <input type="text" class="p-3 rounded-md w-full" data-config-key-placeholder="contact.form.namePlaceholder">
-                        <input type="text" class="p-3 rounded-md w-full" data-config-key-placeholder="contact.form.companyPlaceholder">
+                    <form id="contact-form" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <input type="text" class="p-3 rounded-md w-full sm:col-span-2" data-config-key-placeholder="contact.form.namePlaceholder">
+                        <input type="text" class="p-3 rounded-md w-full sm:col-span-2" data-config-key-placeholder="contact.form.companyPlaceholder">
                         <input type="tel" class="p-3 rounded-md w-full sm:col-span-2" data-config-key-placeholder="contact.form.phonePlaceholder">
                         <textarea id="contact-needs" rows="4" class="p-3 rounded-md w-full sm:col-span-2" data-config-key-placeholder="contact.form.needsPlaceholder"></textarea>
                         <div class="sm:col-span-2">
@@ -246,7 +260,6 @@
                             <div class="liquid-glass-content text-center">
                                 <span data-config-key="contact.form.submitBtn"></span>
                             </div>
-                            <div class="liquid-pulse"></div>
                             <div class="click-gradient"></div>
                         </button>
                     </form>
@@ -256,7 +269,7 @@
     </main>
 
     <footer class="bg-black text-white/50 py-8">
-        <div class="container mx-auto px-6 text-center text-sm">
+        <div class="container mx-auto px-4 sm:px-6 text-center text-sm">
             <p data-config-key="footer.copyright"></p>
             <p class="mt-2" data-config-key="footer.contactInfo"></p>
         </div>
@@ -288,7 +301,6 @@
                         <div class="liquid-glass-content !py-2 !px-6">
                             <span data-config-key="modules.modal.closeBtn"></span>
                         </div>
-                        <div class="liquid-pulse"></div>
                         <div class="click-gradient"></div>
                     </button>
                 </div>

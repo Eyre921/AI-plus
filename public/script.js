@@ -70,17 +70,66 @@ function populateContent() {
  * Builds lists and grids that are defined as arrays in the config.
  */
 function buildDynamicLists() {
-    // Desktop Nav Links
+    // --- FIX: Navigation building logic ---
     const navLinksContainer = document.getElementById('nav-links-desktop');
-    if (navLinksContainer && CONFIG.header?.navLinks) {
+    const mobileNavLinksContainer = document.getElementById('mobile-nav-links');
+
+    if (navLinksContainer && mobileNavLinksContainer && CONFIG.header?.navLinks) {
+        // Clear previous links to prevent duplication on hot reloads
+        navLinksContainer.innerHTML = '';
+        mobileNavLinksContainer.innerHTML = '';
+
+        // Build navigation links
         CONFIG.header.navLinks.forEach(linkText => {
-            const link = document.createElement('a');
-            link.href = `#${getLinkTarget(linkText)}`;
-            link.className = 'hover:text-blue-400 transition-colors';
-            link.textContent = linkText;
-            navLinksContainer.insertBefore(link, navLinksContainer.querySelector('a[href="#contact"]'));
+            // --- Create Desktop Link ---
+            const desktopLink = document.createElement('a');
+            desktopLink.href = `#${getLinkTarget(linkText)}`;
+            desktopLink.className = 'hover:text-blue-400 transition-colors';
+            desktopLink.textContent = linkText;
+            navLinksContainer.appendChild(desktopLink);
+
+            // --- Create Mobile Link ---
+            const mobileLink = document.createElement('a');
+            mobileLink.href = `#${getLinkTarget(linkText)}`;
+            mobileLink.className = 'hover:text-blue-400 transition-colors';
+            mobileLink.textContent = linkText;
+            mobileNavLinksContainer.appendChild(mobileLink);
         });
+
+        // --- Create and Add Contact Button to Desktop Menu ---
+        const contactBtnDesktop = document.createElement('a');
+        contactBtnDesktop.href = "#contact";
+        contactBtnDesktop.className = "liquid-glass-btn !py-2 !px-5 !text-base";
+        contactBtnDesktop.dataset.configKey = "header.contactBtn";
+        contactBtnDesktop.innerHTML = `
+            <div class="liquid-glass-effect"></div>
+            <div class="liquid-glass-tint"></div>
+            <div class="liquid-glass-shine"></div>
+            <div class="liquid-glass-content">
+                <span data-config-key="header.contactBtn">${CONFIG.header.contactBtn || '立即咨询'}</span>
+            </div>
+            <div class="click-gradient"></div>
+        `;
+        navLinksContainer.appendChild(contactBtnDesktop);
+
+        // --- Create and Add Contact Button to Mobile Menu ---
+        const contactBtnMobile = document.createElement('a');
+        contactBtnMobile.href = "#contact";
+        contactBtnMobile.className = "liquid-glass-btn !py-2 !px-5 !text-lg";
+        contactBtnMobile.dataset.configKey = "header.contactBtn";
+        contactBtnMobile.innerHTML = `
+            <div class="liquid-glass-effect"></div>
+            <div class="liquid-glass-tint"></div>
+            <div class="liquid-glass-shine"></div>
+            <div class="liquid-glass-content">
+                <span data-config-key="header.contactBtn">${CONFIG.header.contactBtn || '立即咨询'}</span>
+            </div>
+            <div class="click-gradient"></div>
+        `;
+        mobileNavLinksContainer.appendChild(contactBtnMobile);
     }
+    // --- END OF FIX ---
+
 
     // Vision Section Lists
     const painPointsList = document.getElementById('pain-points-list');
@@ -102,9 +151,9 @@ function buildDynamicLists() {
         metricsGrid.innerHTML = CONFIG.credibility.metrics.map(m => `
             <div class="glass-component">
                 <div class="glass-effect"></div><div class="glass-tint"></div><div class="glass-shine"></div>
-                <div class="glass-content">
-                    <p class="text-5xl font-bold text-blue-400 counter" data-target="${m.target}">0</p>
-                    <p class="text-white/70 mt-2">${m.label}</p>
+                <div class="glass-content !p-3 md:!p-6">
+                    <p class="text-3xl md:text-5xl font-bold text-blue-400 counter" data-target="${m.target}">0</p>
+                    <p class="text-white/70 mt-2 text-xs md:text-base">${m.label}</p>
                 </div><div class="click-gradient"></div>
             </div>
         `).join('');
@@ -116,12 +165,12 @@ function buildDynamicLists() {
     if (compassControls && CONFIG.compass?.dimensions) {
         compassControls.innerHTML = CONFIG.compass.dimensions.map((dim, index) => `
             <div>
-                <h3 class="font-bold text-lg mb-2 flex items-center"><span class="text-blue-400 text-2xl mr-2">${index + 1}</span> ${dim.title}</h3>
+                <h3 class="font-bold text-base md:text-lg mb-2 flex items-center"><span class="text-blue-400 text-xl md:text-2xl mr-2">${index + 1}</span> ${dim.title}</h3>
                 <p class="text-sm text-white/70 mb-3">${dim.desc}</p>
-                <div class="flex flex-wrap gap-3">
+                <div class="flex flex-wrap gap-2">
                     ${dim.options.map(opt => `
                         <div class="tooltip-container">
-                            <button class="compass-btn px-4 py-2 rounded-full text-sm font-medium hover:text-blue-400" data-dimension="${dim.id}" data-value="${opt.value}">
+                            <button class="compass-btn" data-dimension="${dim.id}" data-value="${opt.value}">
                                 ${opt.value}
                             </button>
                             <span class="tooltip-text">${opt.tooltip}</span>
@@ -152,14 +201,15 @@ function buildDynamicLists() {
             <div class="process-step glass-component">
                 <div class="glass-effect"></div><div class="glass-tint"></div><div class="glass-shine"></div>
                 <div class="glass-content">
-                    <div class="text-4xl font-bold" style="color: ${blueColors[index]};">${index + 1 < 10 ? '0' + (index + 1) : index + 1}</div>
-                    <h4 class="font-bold mt-2">${step.title}</h4>
+                    <div class="text-3xl md:text-4xl font-bold" style="color: ${blueColors[index]};">${index + 1 < 10 ? '0' + (index + 1) : index + 1}</div>
+                    <h4 class="font-bold mt-2 text-base md:text-lg">${step.title}</h4>
                     <p class="text-sm text-white/70 mt-1">${step.desc}</p>
                 </div><div class="click-gradient"></div>
             </div>
         `).join('');
     }
 }
+
 
 /**
  * A helper to get the anchor link target from nav text.
@@ -190,6 +240,29 @@ async function callBackendProxy(prompt, isJsonMode = false) {
 
 
 // --- UI Initializers and Event Handlers ---
+function initMobileMenu() {
+    const menuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileNavLinks = document.getElementById('mobile-nav-links');
+
+    if (menuButton && mobileMenu) {
+        menuButton.addEventListener('click', () => {
+            menuButton.classList.toggle('open');
+            mobileMenu.classList.toggle('open');
+            document.body.classList.toggle('overflow-hidden');
+        });
+
+        mobileNavLinks.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A' || e.target.closest('a')) {
+                 menuButton.classList.remove('open');
+                 mobileMenu.classList.remove('open');
+                 document.body.classList.remove('overflow-hidden');
+            }
+        });
+    }
+}
+
+
 function initFadeInObserver() {
     const sections = document.querySelectorAll('.section-fade-in');
     const fadeInObserver = new IntersectionObserver((entries) => {
@@ -227,13 +300,6 @@ function initCounterObserver() {
     counters.forEach(counter => counterObserver.observe(counter));
 }
 
-function initializeEventListeners() {
-    initCompass();
-    initModules();
-    initContactForm();
-}
-
-
 // --- Feature-Specific Logic ---
 function parseMarkdown(text) {
     if (!text) return '';
@@ -243,7 +309,9 @@ function parseMarkdown(text) {
 }
 
 function initCompass() {
-    const buttons = document.querySelectorAll('.compass-btn');
+    const compassContainer = document.getElementById('compass');
+    if (!compassContainer) return;
+
     const generateBtn = document.getElementById('generate-recommendation-btn');
     const recPlaceholder = document.getElementById('recommendation-placeholder');
     const recLoading = document.getElementById('recommendation-loading');
@@ -256,25 +324,21 @@ function initCompass() {
 
     updateChartData({
         labels: ['战略规划', '提产增效', '创新赋能'],
-        datasets: [{ data: chartData, /* ... styling ... */
+        datasets: [{ data: chartData,
             backgroundColor: 'rgba(0, 119, 237, 0.2)', borderColor: 'rgba(0, 119, 237, 0.8)', borderWidth: 2,
             pointBackgroundColor: '#ffffff', pointBorderColor: 'rgba(0, 119, 237, 0.8)', pointHoverBackgroundColor: '#ffffff',
             pointHoverBorderColor: 'rgba(0, 119, 237, 1)', pointRadius: 4, pointHoverRadius: 6
         }]
     });
 
-    buttons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const dimension = this.dataset.dimension;
+    compassContainer.addEventListener('click', function(e) {
+        if (e.target.classList.contains('compass-btn')) {
+            const btn = e.target;
+            const dimension = btn.dataset.dimension;
             document.querySelectorAll(`.compass-btn[data-dimension="${dimension}"]`).forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            userSelections[dimension] = this.dataset.value;
-        });
-    });
-
-    document.querySelectorAll('.compass-btn[data-dimension="approach"]').forEach(btn => {
-        btn.style.minWidth = '120px';
-        btn.style.textAlign = 'center';
+            btn.classList.add('active');
+            userSelections[dimension] = btn.dataset.value;
+        }
     });
 
     const generateRecommendation = async () => {
@@ -353,7 +417,7 @@ function initCompass() {
 
             updateChartData({
                 labels: ['战略规划', '提产增效', '创新赋能'],
-                datasets: [{ data: chartData, /* ... styling ... */
+                datasets: [{ data: chartData,
                     backgroundColor: 'rgba(0, 119, 237, 0.2)', borderColor: 'rgba(0, 119, 237, 0.8)', borderWidth: 2,
                     pointBackgroundColor: '#ffffff', pointBorderColor: 'rgba(0, 119, 237, 0.8)', pointHoverBackgroundColor: '#ffffff',
                     pointHoverBorderColor: 'rgba(0, 119, 237, 1)', pointRadius: 4, pointHoverRadius: 6
@@ -405,10 +469,11 @@ function calculateDimensionScores(selections) {
 function updateChartData(data) {
     if (chartInstance) chartInstance.destroy();
     const ctx = document.getElementById('recommendationChart').getContext('2d');
-    chartInstance = new Chart(ctx, { type: 'radar', data: data, options: { /* ... options ... */
-        responsive: true, maintainAspectRatio: true,
+    chartInstance = new Chart(ctx, { type: 'radar', data: data, options: {
+        responsive: true,
+        maintainAspectRatio: false, // 允许图表填充容器
         scales: { r: { beginAtZero: true, max: 100, ticks: { display: false, stepSize: 20 },
-            pointLabels: { color: 'rgba(255, 255, 255, 0.7)', font: { size: 14, family: "'Noto Sans SC', sans-serif" } },
+            pointLabels: { color: 'rgba(255, 255, 255, 0.7)', font: { size: 12, family: "'Noto Sans SC', sans-serif" } }, // 调整字体
             grid: { color: 'rgba(255, 255, 255, 0.1)' }, angleLines: { color: 'rgba(255, 255, 255, 0.1)' }
         }},
         plugins: { legend: { display: false }, tooltip: {
@@ -437,8 +502,10 @@ function initGlassEffects() {
 }
 
 function initModules() {
+    const moduleContainer = document.getElementById('modules');
+    if (!moduleContainer) return;
+
     const moduleGrid = document.getElementById('module-grid');
-    const filterButtons = document.querySelectorAll('.filter-btn');
     if (!moduleGrid || !CONFIG.modules?.list) return;
 
     const renderModules = (filter = 'all') => {
@@ -447,7 +514,7 @@ function initModules() {
             <div class="glass-component feature-card" data-content="${module.category}-${module.title.replace(/\s+/g, '-').toLowerCase()}">
                 <div class="glass-effect"></div><div class="glass-tint"></div><div class="glass-shine"></div>
                 <div class="glass-content">
-                    <h3 class="text-xl font-bold mb-2">${module.title}</h3>
+                    <h3 class="text-lg md:text-xl font-bold mb-2">${module.title}</h3>
                     <p class="text-white/70 text-sm mb-4">${module.desc}</p>
                     <div class="text-blue-400 text-sm font-medium">查看详情 →</div>
                 </div><div class="click-gradient"></div>
@@ -457,7 +524,7 @@ function initModules() {
         document.querySelectorAll('#module-grid .glass-component').forEach(card => {
             card.addEventListener('click', function() {
                 const contentId = this.dataset.content;
-                const module = CONFIG.modules.list.find(m => contentId === `${m.category}-${m.title.replace(/\s+/g, '-').toLowerCase()}`);
+                const module = CONFIG.modules.list.find(m => contentId === `${m.category}-${module.title.replace(/\s+/g, '-').toLowerCase()}`);
                 if (module) {
                     const modal = document.getElementById('module-modal');
                     document.getElementById('modal-title').textContent = module.title;
@@ -466,9 +533,10 @@ function initModules() {
                     textContent.classList.add('hidden');
                     loading.classList.remove('hidden');
                     modal.classList.add('visible');
+                    document.body.classList.add('overflow-hidden');
                     setTimeout(() => {
                         loading.classList.add('hidden');
-                        textContent.innerHTML = module.details;
+                        textContent.innerHTML = module.details.replace(/\n/g, '<br>');
                         textContent.classList.remove('hidden');
                     }, 500);
                 }
@@ -481,58 +549,50 @@ function initModules() {
     const firstFilter = document.querySelector('.filter-btn');
     if (firstFilter) firstFilter.classList.add('active');
 
-    filterButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            filterButtons.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            renderModules(this.dataset.filter);
-        });
+    moduleContainer.addEventListener('click', function(e) {
+        if (e.target.closest('.filter-btn')) {
+             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+             e.target.closest('.filter-btn').classList.add('active');
+             renderModules(e.target.closest('.filter-btn').dataset.filter);
+        }
     });
 
     const modal = document.getElementById('module-modal');
-    document.getElementById('modal-close-btn')?.addEventListener('click', () => modal.classList.remove('visible'));
-    modal?.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('visible'); });
+    const closeModal = () => {
+        modal.classList.remove('visible');
+        document.body.classList.remove('overflow-hidden');
+    };
+
+    document.getElementById('modal-close-btn')?.addEventListener('click', closeModal);
+    modal?.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 }
 
-// --- UPDATED: Contact Form Logic with robust selectors ---
 function initContactForm() {
-    // These elements have static IDs in the HTML, based on the original script.js
+    const contactForm = document.getElementById('contact-form');
+    if(!contactForm) return;
+
     const optimizeBtn = document.getElementById('optimize-needs-btn');
     const needsTextarea = document.getElementById('contact-needs');
     const optimizeSpinner = document.getElementById('optimize-spinner');
     const optimizeError = document.getElementById('optimize-error');
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+    const nameInput = contactForm.querySelector('input[data-config-key-placeholder="contact.form.namePlaceholder"]');
+    const companyInput = contactForm.querySelector('input[data-config-key-placeholder="contact.form.companyPlaceholder"]');
+    const phoneInput = contactForm.querySelector('input[data-config-key-placeholder="contact.form.phonePlaceholder"]');
 
-    // These elements are now selected using robust data-attributes from the HTML
-    const submitBtn = document.querySelector('button[data-config-key="contact.form.submitBtn"]');
-    const pulseElement = submitBtn.querySelector('.liquid-pulse');
-if (pulseElement) {
-    pulseElement.remove();
-}
-    const nameInput = document.querySelector('input[data-config-key-placeholder="contact.form.namePlaceholder"]');
-    const companyInput = document.querySelector('input[data-config-key-placeholder="contact.form.companyPlaceholder"]');
-    // --- CHANGE: Select phone input instead of email ---
-    const phoneInput = document.querySelector('input[data-config-key-placeholder="contact.form.phonePlaceholder"]');
-
-    // Check if all elements were found before proceeding to avoid errors
     if (!optimizeBtn || !needsTextarea || !submitBtn || !nameInput || !companyInput || !phoneInput) {
-        console.error("One or more contact form elements could not be found. Check HTML structure and data-attributes.");
-        return; // Stop execution of this function if elements are missing
+        console.error("One or more contact form elements could not be found.");
+        return;
     }
 
-    // Dynamically add a placeholder for form error messages
-    const formElement = submitBtn.closest('form');
-    let formError;
-    if (formElement && !document.getElementById('form-error-msg')) {
-        const errorDiv = document.createElement('div');
-        errorDiv.id = 'form-error-msg';
-        errorDiv.className = 'text-red-400 text-sm mt-2 text-center hidden';
-        formElement.appendChild(errorDiv);
-        formError = errorDiv;
-    } else {
-        formError = document.getElementById('form-error-msg');
+    let formError = document.getElementById('form-error-msg');
+    if (!formError) {
+        formError = document.createElement('div');
+        formError.id = 'form-error-msg';
+        formError.className = 'text-red-400 text-sm mt-2 text-center hidden sm:col-span-2';
+        submitBtn.parentElement.insertBefore(formError, submitBtn.nextSibling);
     }
 
-    // AI-Optimizer logic
     optimizeBtn.addEventListener('click', async () => {
         const userInput = needsTextarea.value.trim();
         if (!userInput) {
@@ -546,9 +606,7 @@ if (pulseElement) {
         optimizeSpinner.classList.remove('hidden');
         optimizeError.classList.add('hidden');
 
-        const prompt = `你是一位专业的商业咨询顾问。一位潜在客户留下了以下关于他们需求的初步描述。请将这段描述改写成一段更加清晰、专业、简洁的文字，以方便提交给咨询公司。保留核心意思，但用更专业的商业语言来组织。
-        客户原始描述: "${userInput}"
-        直接输出优化后的文本即可，不需要任何额外的问候或解释。`;
+        const prompt = `你是一位专业的商业咨询顾问。一位潜在客户留下了以下关于他们需求的初步描述。请将这段描述改写成一段更加清晰、专业、简洁的文字，以方便提交给咨询公司。保留核心意思，但用更专业的商业语言来组织。客户原始描述: "${userInput}" 直接输出优化后的文本即可，不需要任何额外的问候或解释。`;
 
         try {
             const responseData = await callBackendProxy(prompt);
@@ -569,11 +627,9 @@ if (pulseElement) {
         }
     });
 
-    // Form submission logic
-    submitBtn.addEventListener('click', async (event) => {
-        event.preventDefault(); // Prevent default form submission
+    contactForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
 
-        // --- CHANGE: Basic validation now checks phone number ---
         if (!nameInput.value.trim() || !companyInput.value.trim() || !phoneInput.value.trim() || !needsTextarea.value.trim()) {
             formError.textContent = '请填写所有必填项。';
             formError.classList.remove('hidden');
@@ -581,32 +637,27 @@ if (pulseElement) {
         }
         formError.classList.add('hidden');
 
-        // Disable button and show loading state
         const originalBtnTextSpan = submitBtn.querySelector('.liquid-glass-content span');
-        if (!originalBtnTextSpan) {
-            console.error('Could not find the text span inside the submit button.');
-            return; // Exit if the button structure is not as expected
-        }
+        if (!originalBtnTextSpan) return;
+
         const originalBtnText = originalBtnTextSpan.textContent;
         submitBtn.disabled = true;
         originalBtnTextSpan.textContent = '正在发送...';
 
-        // --- FIX: Collect data robustly using optional chaining to prevent errors ---
         const formData = {
             name: nameInput.value,
             company: companyInput.value,
             phone: phoneInput.value,
             needs: needsTextarea.value,
-            compassSelections: userSelections, // Global variable
+            compassSelections: userSelections,
             compassReport: {
                 focus: document.getElementById('rec-focus')?.innerHTML || '',
                 content: document.getElementById('rec-content')?.innerHTML || '',
                 combination: document.getElementById('rec-combo')?.innerHTML || ''
             },
-            chartData: chartData // Global variable for radar chart scores
+            chartData: chartData
         };
 
-        // Send data to the new email endpoint
         try {
             const response = await fetch('/api/send-email', {
                 method: 'POST',
@@ -617,15 +668,12 @@ if (pulseElement) {
             if (!response.ok) {
                 throw new Error(result.message || '发送失败，未知错误。');
             }
-            // Success
+
             originalBtnTextSpan.textContent = '发送成功！';
-            setTimeout(() => { // Reset form after a delay
+            setTimeout(() => {
                 submitBtn.disabled = false;
                 originalBtnTextSpan.textContent = originalBtnText;
-                nameInput.value = '';
-                companyInput.value = '';
-                phoneInput.value = '';
-                needsTextarea.value = '';
+                contactForm.reset();
             }, 3000);
         } catch (error) {
             console.error('Error submitting form:', error);
@@ -640,11 +688,8 @@ if (pulseElement) {
 
 function initLiquidGlassButtons() {
     document.querySelectorAll('.liquid-glass-btn').forEach(btn => {
-        // 移除闪烁动画元素
         const pulseEl = btn.querySelector('.liquid-pulse');
-        if (pulseEl) {
-            pulseEl.remove();
-        }
+        if (pulseEl) pulseEl.remove();
 
         const gradientEl = btn.querySelector('.click-gradient');
         if (gradientEl) {
@@ -669,6 +714,7 @@ async function main() {
         if (!CONFIG) return;
 
         populateContent();
+        initMobileMenu();
         initFadeInObserver();
         initCompass();
         initModules();
@@ -676,19 +722,6 @@ async function main() {
         initGlassEffects();
         initLiquidGlassButtons();
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    if (entry.target.querySelectorAll('.glass-component').length > 0) initGlassEffects();
-                    if (entry.target.querySelectorAll('.liquid-glass-btn').length > 0) initLiquidGlassButtons();
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.section-fade-in').forEach(section => {
-            observer.observe(section);
-        });
     } catch (error) {
         console.error("Error initializing application:", error);
     }

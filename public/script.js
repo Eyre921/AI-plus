@@ -810,7 +810,8 @@ function initContactForm() {
 
             // Check if the response has the expected 'text' property
             if (responseData && typeof responseData.text === 'string') {
-                needsTextarea.value = responseData.text;
+                // MODIFICATION: Trim leading/trailing whitespace from the AI response
+                needsTextarea.value = responseData.text.trim();
                 needsTextarea.style.height = 'auto';
                 needsTextarea.style.height = needsTextarea.scrollHeight + 'px';
             } else {

@@ -38,12 +38,8 @@ function populateContent() {
         const key = el.getAttribute('data-config-key');
         const content = getNestedProp(CONFIG, key);
         if (content !== null && content !== undefined) {
-            // FIX: If an element with a data-key has its own children that ALSO have a data-key,
-            // assume the parent is just a container and should not have its innerHTML overwritten.
-            // The child will be handled by the loop separately. This prevents destroying complex components like buttons.
             if (el.querySelector('[data-config-key]')) {
                 // This element is a container for other keyed elements.
-                // Do nothing to it, and let the loop handle the children.
             } else if (el.tagName === 'TITLE') {
                 el.textContent = content;
             } else {
@@ -70,25 +66,20 @@ function populateContent() {
  * Builds lists and grids that are defined as arrays in the config.
  */
 function buildDynamicLists() {
-    // --- FIX: Navigation building logic ---
     const navLinksContainer = document.getElementById('nav-links-desktop');
     const mobileNavLinksContainer = document.getElementById('mobile-nav-links');
 
     if (navLinksContainer && mobileNavLinksContainer && CONFIG.header?.navLinks) {
-        // Clear previous links to prevent duplication on hot reloads
         navLinksContainer.innerHTML = '';
         mobileNavLinksContainer.innerHTML = '';
 
-        // Build navigation links
         CONFIG.header.navLinks.forEach(linkText => {
-            // --- Create Desktop Link ---
             const desktopLink = document.createElement('a');
             desktopLink.href = `#${getLinkTarget(linkText)}`;
             desktopLink.className = 'hover:text-blue-400 transition-colors';
             desktopLink.textContent = linkText;
             navLinksContainer.appendChild(desktopLink);
 
-            // --- Create Mobile Link ---
             const mobileLink = document.createElement('a');
             mobileLink.href = `#${getLinkTarget(linkText)}`;
             mobileLink.className = 'hover:text-blue-400 transition-colors';
@@ -96,42 +87,19 @@ function buildDynamicLists() {
             mobileNavLinksContainer.appendChild(mobileLink);
         });
 
-        // --- Create and Add Contact Button to Desktop Menu ---
         const contactBtnDesktop = document.createElement('a');
         contactBtnDesktop.href = "#contact";
         contactBtnDesktop.className = "liquid-glass-btn !py-2 !px-5 !text-base";
-        contactBtnDesktop.dataset.configKey = "header.contactBtn";
-        contactBtnDesktop.innerHTML = `
-            <div class="liquid-glass-effect"></div>
-            <div class="liquid-glass-tint"></div>
-            <div class="liquid-glass-shine"></div>
-            <div class="liquid-glass-content">
-                <span data-config-key="header.contactBtn">${CONFIG.header.contactBtn || '立即咨询'}</span>
-            </div>
-            <div class="click-gradient"></div>
-        `;
+        contactBtnDesktop.innerHTML = `<div class="liquid-glass-effect"></div><div class="liquid-glass-tint"></div><div class="liquid-glass-shine"></div><div class="liquid-glass-content"><span data-config-key="header.contactBtn">${CONFIG.header.contactBtn || '立即咨询'}</span></div><div class="click-gradient"></div>`;
         navLinksContainer.appendChild(contactBtnDesktop);
 
-        // --- Create and Add Contact Button to Mobile Menu ---
         const contactBtnMobile = document.createElement('a');
         contactBtnMobile.href = "#contact";
         contactBtnMobile.className = "liquid-glass-btn !py-2 !px-5 !text-lg";
-        contactBtnMobile.dataset.configKey = "header.contactBtn";
-        contactBtnMobile.innerHTML = `
-            <div class="liquid-glass-effect"></div>
-            <div class="liquid-glass-tint"></div>
-            <div class="liquid-glass-shine"></div>
-            <div class="liquid-glass-content">
-                <span data-config-key="header.contactBtn">${CONFIG.header.contactBtn || '立即咨询'}</span>
-            </div>
-            <div class="click-gradient"></div>
-        `;
+        contactBtnMobile.innerHTML = `<div class="liquid-glass-effect"></div><div class="liquid-glass-tint"></div><div class="liquid-glass-shine"></div><div class="liquid-glass-content"><span data-config-key="header.contactBtn">${CONFIG.header.contactBtn || '立即咨询'}</span></div><div class="click-gradient"></div>`;
         mobileNavLinksContainer.appendChild(contactBtnMobile);
     }
-    // --- END OF FIX ---
 
-
-    // Vision Section Lists
     const painPointsList = document.getElementById('pain-points-list');
     if (painPointsList && CONFIG.vision?.painPoints?.points) {
         painPointsList.innerHTML = CONFIG.vision.painPoints.points.map(p =>
@@ -145,7 +113,6 @@ function buildDynamicLists() {
         ).join('');
     }
 
-    // Credibility Metrics
     const metricsGrid = document.getElementById('metrics-grid');
     if (metricsGrid && CONFIG.credibility?.metrics) {
         metricsGrid.innerHTML = CONFIG.credibility.metrics.map(m => `
@@ -160,14 +127,13 @@ function buildDynamicLists() {
         initCounterObserver();
     }
 
-    // Compass Controls
     const compassControls = document.getElementById('compass-controls');
     if (compassControls && CONFIG.compass?.dimensions) {
         compassControls.innerHTML = CONFIG.compass.dimensions.map((dim, index) => `
             <div>
                 <h3 class="font-bold text-base md:text-lg mb-2 flex items-center"><span class="text-blue-400 text-xl md:text-2xl mr-2">${index + 1}</span> ${dim.title}</h3>
                 <p class="text-sm text-white/70 mb-3">${dim.desc}</p>
-                <div class="flex flex-wrap gap-2">
+                <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
                     ${dim.options.map(opt => `
                         <div class="tooltip-container">
                             <button class="compass-btn" data-dimension="${dim.id}" data-value="${opt.value}">
@@ -181,7 +147,6 @@ function buildDynamicLists() {
         `).join('');
     }
 
-    // Module Filters
     const moduleFilters = document.getElementById('module-filters');
     if (moduleFilters && CONFIG.modules?.filters) {
         moduleFilters.innerHTML = CONFIG.modules.filters.map((f) => `
@@ -193,7 +158,6 @@ function buildDynamicLists() {
         `).join('');
     }
 
-    // Process Steps
     const processSteps = document.getElementById('process-steps');
     if (processSteps && CONFIG.process?.steps) {
         const blueColors = ['#63B3ED', '#4299E1', '#3182CE', '#2B6CB0'];
@@ -466,15 +430,26 @@ function calculateDimensionScores(selections) {
     };
 }
 
+// FIX: Made chart labels responsive
 function updateChartData(data) {
     if (chartInstance) chartInstance.destroy();
+
     const ctx = document.getElementById('recommendationChart').getContext('2d');
+    const isMobile = window.innerWidth < 768;
+
     chartInstance = new Chart(ctx, { type: 'radar', data: data, options: {
         responsive: true,
-        maintainAspectRatio: false, // 允许图表填充容器
+        maintainAspectRatio: false,
         scales: { r: { beginAtZero: true, max: 100, ticks: { display: false, stepSize: 20 },
-            pointLabels: { color: 'rgba(255, 255, 255, 0.7)', font: { size: 12, family: "'Noto Sans SC', sans-serif" } }, // 调整字体
-            grid: { color: 'rgba(255, 255, 255, 0.1)' }, angleLines: { color: 'rgba(255, 255, 255, 0.1)' }
+            pointLabels: {
+                color: 'rgba(255, 255, 255, 0.7)',
+                font: {
+                    size: isMobile ? 10 : 14, // Smaller font on mobile
+                    family: "'Noto Sans SC', sans-serif"
+                }
+            },
+            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+            angleLines: { color: 'rgba(255, 255, 255, 0.1)' }
         }},
         plugins: { legend: { display: false }, tooltip: {
             backgroundColor: 'rgba(0, 0, 0, 0.7)', titleFont: { size: 14, family: "'Noto Sans SC', sans-serif" },
@@ -590,7 +565,7 @@ function initContactForm() {
         formError = document.createElement('div');
         formError.id = 'form-error-msg';
         formError.className = 'text-red-400 text-sm mt-2 text-center hidden sm:col-span-2';
-        submitBtn.parentElement.insertBefore(formError, submitBtn.nextSibling);
+        submitBtn.parentElement.parentElement.insertBefore(formError, submitBtn.parentElement.nextSibling);
     }
 
     optimizeBtn.addEventListener('click', async () => {

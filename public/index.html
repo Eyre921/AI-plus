@@ -38,15 +38,6 @@
             <!-- Desktop Navigation -->
             <div class="hidden md:flex space-x-8 items-center" id="nav-links-desktop">
                 <!-- Nav links will be populated by JS -->
-                <a href="#contact" class="liquid-glass-btn !py-2 !px-5 !text-base" data-config-key="header.contactBtn">
-                    <div class="liquid-glass-effect"></div>
-                    <div class="liquid-glass-tint"></div>
-                    <div class="liquid-glass-shine"></div>
-                    <div class="liquid-glass-content">
-                        <span data-config-key="header.contactBtn"></span>
-                    </div>
-                    <div class="click-gradient"></div>
-                </a>
             </div>
 
             <!-- Mobile Navigation Button -->
@@ -64,15 +55,6 @@
     <div id="mobile-menu" class="mobile-menu">
         <div id="mobile-nav-links" class="flex flex-col items-center justify-center h-full space-y-8 text-2xl">
             <!-- Mobile nav links will be populated by JS -->
-             <a href="#contact" class="liquid-glass-btn !py-2 !px-5 !text-lg" data-config-key="header.contactBtn">
-                <div class="liquid-glass-effect"></div>
-                <div class="liquid-glass-tint"></div>
-                <div class.liquid-glass-shine"></div>
-                <div class="liquid-glass-content">
-                    <span data-config-key="header.contactBtn"></span>
-                </div>
-                <div class="click-gradient"></div>
-            </a>
         </div>
     </div>
 
@@ -149,16 +131,17 @@
                     <p class="mt-4 text-white/70 max-w-3xl mx-auto" data-config-key="compass.subtitle"></p>
                 </div>
                 <div class="max-w-6xl mx-auto">
-                    <div class="grid lg:grid-cols-2 gap-8 lg:gap-12">
+                    <!-- FIX: Adjusted gap for better stacking on mobile -->
+                    <div class="grid lg:grid-cols-2 gap-12">
                         <div>
                             <div id="compass-controls" class="space-y-6"></div>
-                            <div class="mt-6">
+                            <div class="mt-8 flex justify-center lg:justify-start">
                                 <button id="generate-recommendation-btn" class="liquid-glass-btn">
                                     <div class="liquid-glass-effect"></div>
                                     <div class="liquid-glass-tint"></div>
                                     <div class="liquid-glass-shine"></div>
                                     <div class="liquid-glass-content !py-2.5 !px-6 !text-base !font-medium flex items-center justify-center gap-2">
-                                        <span data-config-key="compass.resultCard.generateBtn">生成个性化方案</span>
+                                        <span data-config-key="compass.resultCard.generateBtn"></span>
                                         <span id="generate-recommendation-spinner" class="spinner-sm hidden"></span>
                                     </div>
                                     <div class="click-gradient"></div>
@@ -253,15 +236,17 @@
                             </button>
                             <p id="optimize-error" class="text-amber-300 text-sm mb-2 hidden"></p>
                         </div>
-                        <button type="submit" class="sm:col-span-2 liquid-glass-btn" data-config-key="contact.form.submitBtn">
-                            <div class="liquid-glass-effect"></div>
-                            <div class="liquid-glass-tint"></div>
-                            <div class="liquid-glass-shine"></div>
-                            <div class="liquid-glass-content text-center">
-                                <span data-config-key="contact.form.submitBtn"></span>
-                            </div>
-                            <div class="click-gradient"></div>
-                        </button>
+                        <div class="sm:col-span-2">
+                             <button type="submit" class="w-full liquid-glass-btn" data-config-key="contact.form.submitBtn">
+                                <div class="liquid-glass-effect"></div>
+                                <div class="liquid-glass-tint"></div>
+                                <div class="liquid-glass-shine"></div>
+                                <div class="liquid-glass-content text-center">
+                                    <span data-config-key="contact.form.submitBtn"></span>
+                                </div>
+                                <div class="click-gradient"></div>
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>

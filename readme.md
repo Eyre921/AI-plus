@@ -71,8 +71,8 @@ ai-ecommerce-webapp/
 1.  **克隆仓库：**
 
     ```bash
-    git clone https://github.com/your-username/ai-ecommerce-webapp.git
-    cd ai-ecommerce-webapp
+    git clone https://github.com/Eyre921/AI-plus.git
+    cd AI-plus
     ```
 
 2.  **安装后端依赖：**

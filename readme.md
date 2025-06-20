@@ -1,35 +1,40 @@
-# AI+电商增长引擎 - 交互式全栈Web应用
+# AI+电商增长引擎 交互式落地页
 
-这是一个交互式、内容驱动的全栈Web应用，旨在作为AI+电商培训服务的官方落地页。项目前端使用原生HTML/CSS/JS构建，后端使用Node.js + Express搭建了一个安全的API代理服务，实现了前后端分离，并将所有网站文案内容配置化。
+[](https://nodejs.org/)
+[](https://opensource.org/licenses/MIT)
+[](https://www.google.com/search?q=CONTRIBUTING.md)
 
-[](https://placehold.co)
+这是一个全栈、交互式的落地页，专为“AI+电商”咨询服务设计。该项目拥有一个现代化的、带动画效果的前端，一个用于AI模型集成的、安全的Node.js后端代理，以及一个由配置驱动的方法，让你无需修改代码即可轻松更新内容。
+
 
 -----
 
 ## ✨ 核心功能
 
-  - **动态内容配置**: 网站的所有文本内容（如标题、描述、按钮文字等）都由根目录下的 `public/config.json` 文件动态加载，非技术人员也能轻松修改文案。
-  - **安全API代理**: 所有对外部AI大模型API的请求都通过后端服务器进行代理，用户的API密钥等敏感信息安全地存储在服务器的 `.env` 文件中，不会暴露在前端。
-  - **交互式AI方案生成器**: “五维罗盘”功能允许用户通过点选，实时调用AI生成一份个性化的培训方案建议，并用Chart.js动态展示结果雷达图。
-  - **AI内容预览**: “课程模块”部分提供“AI生成内容示例”功能，用户点击即可实时调用AI，获取具体课程的亮点介绍，提升用户体验。
-  - **AI需求优化**: “联系我们”表单中集成了“AI优化描述”功能，可以帮助用户将口语化的需求描述一键优化为更专业、更清晰的商业语言。
-  - **前后端分离**: 清晰的项目结构，将前端（HTML/CSS/JS）、后端（Node.js/Express）和配置（JSON）完全分离，易于维护和扩展。
+  * **动态内容管理**：网站的所有文本都从单一的 `public/config.json` 文件加载，使非开发人员也能轻松更新内容。
+  * **安全的API后端**：Node.js服务器作为一个安全代理，处理所有对外部API的调用。
+      * **AI模型网关**：通过将API密钥和接入点保留在服务器上，安全地查询大语言模型（LLM），绝不将其暴露于前端。
+      * **邮件服务**：包含一个由 `nodemailer` 驱动的接口，可将联系表单提交的内容安全地作为格式化邮件发送。
+  * **交互式AI小工具**：
+      * **“五维罗盘”**：一个交互式问卷，可实时调用AI模型，生成个性化的培训方案和一个动态的Chart.js雷达图。
+      * **“AI需求优化”**：联系表单中的一项功能，可使用大语言模型将用户输入的口语化需求描述优化为更专业、更清晰的文本。
+  * **现代化前端**：使用原生JavaScript、Tailwind CSS和Chart.js构建，具有流畅的动画、响应式设计和独特的“液态玻璃”UI美学。
+  * **开发者友好**：清晰分离的结构（前端在 `/public`，后端是 `server.js`，配置是 `/public/config.json`）使得项目易于理解、维护和扩展。
 
 -----
 
 ## 🛠️ 技术栈
 
-  - **前端**:
-      - HTML5
-      - [Tailwind CSS](https://tailwindcss.com/): 用于快速构建UI的工具优先CSS框架。
-      - [Chart.js](https://www.chartjs.org/): 用于数据可视化的JavaScript库。
-      - 原生 JavaScript (ES6+ Modules)
-  - **后端**:
-      - [Node.js](https://nodejs.org/): JavaScript运行时环境。
-      - [Express.js](https://expressjs.com/): Node.js的Web应用框架。
-      - [Axios](https://axios-http.com/): 用于发送HTTP请求的Promise库。
-      - `dotenv`: 用于管理环境变量。
-  - **AI模型接口**: 兼容所有与OpenAI API格式一致的大模型服务商（如硅基流动、月之暗面等）。
+| 类别         | 技术                                                       |
+| ------------ | ---------------------------------------------------------- |
+| **前端** | HTML5, CSS3, 原生 JavaScript (ES6 模块)          |
+| **样式** | [Tailwind CSS](https://tailwindcss.com/)         |
+| **数据可视化** | [Chart.js](https://www.chartjs.org/)             |
+| **后端** | [Node.js](https://nodejs.org/), [Express.js](https://expressjs.com/) |
+| **HTTP客户端** | [Axios](https://axios-http.com/)                 |
+| **邮件** | [Nodemailer](https://nodemailer.com/)            |
+| **环境** | `dotenv`                                         |
+| **AI集成** | 兼容任何与OpenAI API格式一致的服务商（如硅基流动） |
 
 -----
 
@@ -37,103 +42,85 @@
 
 ```
 ai-ecommerce-webapp/
-├── public/              # 存放所有前端静态资源
-│   ├── index.html       # 前端主HTML文件
-│   ├── style.css        # 前端样式文件
-│   ├── script.js        # 前端核心逻辑
+├── public/              # 所有前端静态资源
+│   ├── index.html       # 主HTML文件
+│   ├── style.css        # 自定义样式
+│   ├── script.js        # 核心前端逻辑
 │   └── config.json      # 网站内容配置文件
-├── .env                 # (本地配置，需手动创建) 存放API密钥等环境变量
+├── .env                 # （必须在本地创建）用于存储环境变量
 ├── .env.example         # 环境变量示例文件
-├── .gitignore           # Git忽略配置文件
+├── .gitignore           # Git忽略配置
 ├── package.json         # 项目依赖与脚本配置
-├── server.js            # 后端Express服务器
-└── README.md            # 项目说明文档
+├── server.js            # Express后端服务器逻辑
+└── README.md            # 本文档
 ```
 
 -----
 
-## 🚀 快速开始
+## 🚀 快速上手
 
-请按照以下步骤在本地运行此项目。
+请遵循以下说明，在你的本地计算机上启动并运行本项目。
 
-### 1\. 克隆仓库
+### 先决条件
 
-```bash
-git clone https://github.com/Eyre921/AI-plus
-cd ai-ecommerce-webapp
-```
+  * [Node.js](https://nodejs.org/en/download/) (推荐使用 18.x 或更高版本)
+  * npm (通常随 Node.js 一起安装)
 
-### 2\. 安装依赖
+### 安装
 
-此项目仅需安装后端依赖。
+1.  **克隆仓库：**
 
-```bash
-npm install
-```
+    ```bash
+    git clone https://github.com/your-username/ai-ecommerce-webapp.git
+    cd ai-ecommerce-webapp
+    ```
 
-### 3\. 配置环境变量
+2.  **安装后端依赖：**
 
-将根目录下的 `.env.example` 文件复制并重命名为 `.env`。
+    ```bash
+    npm install
+    ```
 
-```bash
-cp .env.example .env
-```
+3.  **配置你的环境：**
+    复制环境变量示例文件，以创建你自己的本地配置。
 
-然后，编辑 `.env` 文件，填入您自己的API服务商提供的信息。
+    ```bash
+    cp .env.example .env
+    ```
 
-```dotenv
-# .env
+    然后，打开 `.env` 文件并填入你的特定凭据。
 
-# 您的API密钥
-API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxx"
+### 配置
 
-# 您的API接入点 (Endpoint)
-API_ENDPOINT="https://api.siliconflow.cn/v1/chat/completions"
+你的 `.env` 文件对应用程序的正常运行至关重要。它应包含以下键：
 
-# 您希望使用的模型名称
-API_MODEL="Qwen/Qwen3-8B"
+| 变量 | 描述 | 示例 |
+| --- | --- | --- |
+| `API_KEY` | 你的AI模型服务商提供的密钥。 | `sk-xxxxxxxxxxxxxxxxxxxxxxxx` |
+| `API_ENDPOINT` | chat completions接口的完整URL。 | `https://api.siliconflow.cn/v1/chat/completions` |
+| `API_MODEL` | 你希望使用的具体模型。 | `alibaba/qwen-long` |
+| `PORT` | （可选）服务器运行的端口。默认为`3000`。 | `3000` |
+| **邮件服务** | | |
+| `EMAIL_HOST` | 你的邮件服务商的SMTP服务器主机。 | `smtp.example.com` |
+| `EMAIL_PORT` | SMTP端口（TLS为`587`，SSL为`465`）。 | `587` |
+| `EMAIL_SECURE` | 如果使用端口465，则设为`true`，否则为`false`。 | `false` |
+| `EMAIL_USER` | 用于发送邮件的邮箱地址。 | `your-email@example.com` |
+| `EMAIL_PASS` | 你的邮箱账户的应用专用密码或授权码。 | `your-email-password-or-token` |
+| `EMAIL_TO` | 你希望接收联系表单提交内容的邮箱地址。 | `recipient-email@example.com` |
 
-# 服务器运行端口 (可选)
-PORT=3000
-```
+-----
 
-### 4\. 启动服务器
+## 🔧 使用
+
+完成安装和配置后，使用以下命令启动服务器：
 
 ```bash
 npm start
 ```
 
-服务器启动后，您将在终端看到以下输出：
+你将在终端看到确认信息：
+`服务器正在 http://localhost:3000 上运行`
 
-```
-Server is running on http://localhost:3000
-```
-
-### 5\. 访问应用
-
-在您的浏览器中打开 `http://localhost:3000`，即可看到运行中的Web应用。
+打开你的浏览器并访问 **http://localhost:3000** 即可看到运行中的应用。
 
 -----
-
-## 🔧 自定义与配置
-
-### 修改网站文案
-
-若要修改网站上显示的任何文本，请直接编辑 `public/config.json` 文件。文件结构与网站内容的层级一一对应，修改后刷新浏览器即可看到变化。
-
-### 更换AI模型
-
-若要更换AI模型或API服务商，只需修改 `.env` 文件中的 `API_KEY`, `API_ENDPOINT` 和 `API_MODEL` 即可，无需改动任何代码。
-
------
-
-## 🤝 贡献
-
-欢迎任何形式的贡献！如果您有好的想法或发现了Bug，请随时提交Pull Request或开启一个Issue。
-
-1.  Fork 本仓库
-2.  创建您的新分支 (`git checkout -b feature/AmazingFeature`)
-3.  提交您的更改 (`git commit -m 'Add some AmazingFeature'`)
-4.  将您的分支推送到远程 (`git push origin feature/AmazingFeature`)
-5.  开启一个 Pull Request
-

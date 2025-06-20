@@ -111,7 +111,12 @@ app.post('/api/proxy', async (req, res) => {
 // --- 新增：发送邮件的 API 路由 ---
 app.post('/api/send-email', async (req, res) => {
     console.log('\n========== 收到发送邮件请求 ==========');
-    const { name, company, email, needs, compassSelections, compassReport, chartData } = req.body;
+    const { name, company, phone, needs, compassSelections, compassReport, chartData } = req.body;
+
+    // --- FIX: Add guards against missing or incomplete data from the client ---
+    const selections = compassSelections || {};
+    const report = compassReport || { focus: '未生成', content: '未生成', combination: '未生成' };
+    const data = chartData || [0, 0, 0];
 
     // 验证邮件配置
     const { EMAIL_HOST, EMAIL_PORT, EMAIL_SECURE, EMAIL_USER, EMAIL_PASS, EMAIL_TO } = process.env;
@@ -131,39 +136,39 @@ app.post('/api/send-email', async (req, res) => {
         },
     });
 
-    // 将五维罗盘选择转换为HTML
-    const selectionsHtml = Object.entries(compassSelections)
-        .map(([key, value]) => `<li><strong>${key}:</strong> ${value}</li>`)
-        .join('');
+    // 将五维罗盘选择转换为HTML (Gracefully handle empty selections)
+    const selectionsHtml = Object.keys(selections).length > 0
+        ? Object.entries(selections).map(([key, value]) => `<li><strong>${key}:</strong> ${value}</li>`).join('')
+        : '<li>客户未进行五维罗盘选择。</li>';
+
 
     // 将AI报告数据转换为HTML
     const reportHtml = `
         <h4>核心价值 (Strategic Value)</h4>
-        <div>${compassReport.focus}</div>
+        <div>${report.focus}</div>
         <hr>
         <h4>能力建设 (Capability Building)</h4>
-        <div>${compassReport.content}</div>
+        <div>${report.content}</div>
         <hr>
         <h4>推荐方案 (Recommendation)</h4>
-        <div>${compassReport.combination}</div>
+        <div>${report.combination}</div>
     `;
 
     // 将雷达图数据转换为HTML
      const chartHtml = `
         <h4>AI化转型评分</h4>
         <ul>
-            <li><strong>战略规划:</strong> ${chartData[0]}/100</li>
-            <li><strong>提产增效:</strong> ${chartData[1]}/100</li>
-            <li><strong>创新赋能:</strong> ${chartData[2]}/100</li>
+            <li><strong>战略规划:</strong> ${data[0]}/100</li>
+            <li><strong>提产增效:</strong> ${data[1]}/100</li>
+            <li><strong>创新赋能:</strong> ${data[2]}/100</li>
         </ul>
      `;
 
     // 邮件内容
     const mailOptions = {
-        from: `"${company} - ${name}" <${EMAIL_USER}>`, // 发件人
+        from: `"${company || '未知公司'} - ${name || '未知姓名'}" <${EMAIL_USER}>`, // 发件人
         to: EMAIL_TO, // 收件人
-        subject: `【炬象未来】新的客户咨询 - ${company}`, // 邮件主题
-        replyTo: email, // 设置回复地址为客户邮箱
+        subject: `【炬象未来】新的客户咨询 - ${company || '来自网站'}`, // 邮件主题
         html: `
             <div style="font-family: Arial, sans-serif; line-height: 1.6;">
                 <h2>您收到一份新的客户咨询</h2>
@@ -171,12 +176,12 @@ app.post('/api/send-email', async (req, res) => {
                 <hr>
                 <h3>客户基本信息</h3>
                 <ul>
-                    <li><strong>姓名:</strong> ${name}</li>
-                    <li><strong>公司:</strong> ${company}</li>
-                    <li><strong>邮箱:</strong> <a href="mailto:${email}">${email}</a></li>
+                    <li><strong>姓名:</strong> ${name || '未提供'}</li>
+                    <li><strong>公司:</strong> ${company || '未提供'}</li>
+                    <li><strong>电话号码:</strong> ${phone || '未提供'}</li>
                 </ul>
                 <h3>客户原始需求</h3>
-                <p style="padding: 10px; border-left: 3px solid #ccc; background-color: #f9f9f9;">${needs}</p>
+                <p style="padding: 10px; border-left: 3px solid #ccc; background-color: #f9f9f9;">${needs || '未提供'}</p>
                 <hr>
                 <h3>五维罗盘诊断选择</h3>
                 <ul>${selectionsHtml}</ul>

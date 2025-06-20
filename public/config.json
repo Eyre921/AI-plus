@@ -525,7 +525,7 @@
     "form": {
         "namePlaceholder": "您的姓名",
         "companyPlaceholder": "公司名称",
-        "emailPlaceholder": "您的邮箱",
+        "phonePlaceholder": "您的电话号码",
         "needsPlaceholder": "您的主要痛点或需求...",
         "optimizeBtn": "✨ AI 帮我优化需求描述 ✨ ",
         "submitBtn": "提交并获取免费咨询"

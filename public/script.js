@@ -25,7 +25,7 @@ async function fetchConfig() {
 }
 
 /**
- * Populates the DOM with content from the config file. (Restored to original stable version)
+ * Populates the DOM with content from the config file.
  */
 function populateContent() {
     if (!CONFIG) return;
@@ -37,11 +37,17 @@ function populateContent() {
     document.querySelectorAll('[data-config-key]').forEach(el => {
         const key = el.getAttribute('data-config-key');
         const content = getNestedProp(CONFIG, key);
-        if (content) {
-            if (el.tagName === 'TITLE') {
+        if (content !== null && content !== undefined) {
+            // FIX: If an element with a data-key has its own children that ALSO have a data-key,
+            // assume the parent is just a container and should not have its innerHTML overwritten.
+            // The child will be handled by the loop separately. This prevents destroying complex components like buttons.
+            if (el.querySelector('[data-config-key]')) {
+                // This element is a container for other keyed elements.
+                // Do nothing to it, and let the loop handle the children.
+            } else if (el.tagName === 'TITLE') {
                 el.textContent = content;
             } else {
-                 el.innerHTML = content; // Using innerHTML to support simple tags in config
+                el.innerHTML = content; // Using innerHTML to support simple tags in config
             }
         }
     });
@@ -498,12 +504,17 @@ function initContactForm() {
 
     // These elements are now selected using robust data-attributes from the HTML
     const submitBtn = document.querySelector('button[data-config-key="contact.form.submitBtn"]');
+    const pulseElement = submitBtn.querySelector('.liquid-pulse');
+if (pulseElement) {
+    pulseElement.remove();
+}
     const nameInput = document.querySelector('input[data-config-key-placeholder="contact.form.namePlaceholder"]');
     const companyInput = document.querySelector('input[data-config-key-placeholder="contact.form.companyPlaceholder"]');
-    const emailInput = document.querySelector('input[data-config-key-placeholder="contact.form.emailPlaceholder"]');
+    // --- CHANGE: Select phone input instead of email ---
+    const phoneInput = document.querySelector('input[data-config-key-placeholder="contact.form.phonePlaceholder"]');
 
     // Check if all elements were found before proceeding to avoid errors
-    if (!optimizeBtn || !needsTextarea || !submitBtn || !nameInput || !companyInput || !emailInput) {
+    if (!optimizeBtn || !needsTextarea || !submitBtn || !nameInput || !companyInput || !phoneInput) {
         console.error("One or more contact form elements could not be found. Check HTML structure and data-attributes.");
         return; // Stop execution of this function if elements are missing
     }
@@ -562,8 +573,8 @@ function initContactForm() {
     submitBtn.addEventListener('click', async (event) => {
         event.preventDefault(); // Prevent default form submission
 
-        // Basic Validation
-        if (!nameInput.value.trim() || !companyInput.value.trim() || !emailInput.value.trim() || !needsTextarea.value.trim()) {
+        // --- CHANGE: Basic validation now checks phone number ---
+        if (!nameInput.value.trim() || !companyInput.value.trim() || !phoneInput.value.trim() || !needsTextarea.value.trim()) {
             formError.textContent = '请填写所有必填项。';
             formError.classList.remove('hidden');
             return;
@@ -571,21 +582,26 @@ function initContactForm() {
         formError.classList.add('hidden');
 
         // Disable button and show loading state
-        const originalBtnText = submitBtn.textContent;
+        const originalBtnTextSpan = submitBtn.querySelector('.liquid-glass-content span');
+        if (!originalBtnTextSpan) {
+            console.error('Could not find the text span inside the submit button.');
+            return; // Exit if the button structure is not as expected
+        }
+        const originalBtnText = originalBtnTextSpan.textContent;
         submitBtn.disabled = true;
-        submitBtn.textContent = '正在发送...';
+        originalBtnTextSpan.textContent = '正在发送...';
 
-        // Collect all data
+        // --- FIX: Collect data robustly using optional chaining to prevent errors ---
         const formData = {
             name: nameInput.value,
             company: companyInput.value,
-            email: emailInput.value,
+            phone: phoneInput.value,
             needs: needsTextarea.value,
             compassSelections: userSelections, // Global variable
-            compassReport: { // Get report content from the DOM
-                focus: document.getElementById('rec-focus').innerHTML,
-                content: document.getElementById('rec-content').innerHTML,
-                combination: document.getElementById('rec-combo').innerHTML
+            compassReport: {
+                focus: document.getElementById('rec-focus')?.innerHTML || '',
+                content: document.getElementById('rec-content')?.innerHTML || '',
+                combination: document.getElementById('rec-combo')?.innerHTML || ''
             },
             chartData: chartData // Global variable for radar chart scores
         };
@@ -602,13 +618,13 @@ function initContactForm() {
                 throw new Error(result.message || '发送失败，未知错误。');
             }
             // Success
-            submitBtn.textContent = '发送成功！';
+            originalBtnTextSpan.textContent = '发送成功！';
             setTimeout(() => { // Reset form after a delay
                 submitBtn.disabled = false;
-                submitBtn.textContent = originalBtnText;
+                originalBtnTextSpan.textContent = originalBtnText;
                 nameInput.value = '';
                 companyInput.value = '';
-                emailInput.value = '';
+                phoneInput.value = '';
                 needsTextarea.value = '';
             }, 3000);
         } catch (error) {
@@ -616,7 +632,7 @@ function initContactForm() {
             formError.textContent = `发送失败: ${error.message}`;
             formError.classList.remove('hidden');
             submitBtn.disabled = false;
-            submitBtn.textContent = originalBtnText;
+            originalBtnTextSpan.textContent = originalBtnText;
         }
     });
 }
@@ -624,6 +640,12 @@ function initContactForm() {
 
 function initLiquidGlassButtons() {
     document.querySelectorAll('.liquid-glass-btn').forEach(btn => {
+        // 移除闪烁动画元素
+        const pulseEl = btn.querySelector('.liquid-pulse');
+        if (pulseEl) {
+            pulseEl.remove();
+        }
+
         const gradientEl = btn.querySelector('.click-gradient');
         if (gradientEl) {
             btn.addEventListener('mousedown', function(e) {
